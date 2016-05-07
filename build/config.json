@@ -1,0 +1,7 @@
+{
+    "DBType":"postgres",
+    "DBUser":"postgres",
+    "DBName":"mydb",
+    "SSLMode":"verify-full",
+    "ServerAddr":"127.0.0.1:9090"
+}
