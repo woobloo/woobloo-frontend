@@ -1,25 +1,17 @@
 package main
 
 import (
-	"database/sql"
 	"github.com/gragas/woobloo-frontend/config"
-	_ "github.com/lib/pq"
 	"html/template"
 	"io/ioutil"
 	"net/http"
 )
 
-var db *sql.DB
 var templates map[string]*template.Template
 
 func main() {
-	// connect to the database
-	var err error
+	// load the config file
 	config := config.LoadConfig("config.json")
-	db, err = sql.Open(config.DBType, config.ConnectionString())
-	if err != nil {
-		panic(err)
-	}
 
 	// initialize maps, etc.
 	templates = make(map[string]*template.Template)
