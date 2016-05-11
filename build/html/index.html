@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ .Title }}</title>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href='/static/css/main.css' rel='stylesheet' type='text/css'>
+    <!-- Google Sign-In -->
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="INSERT_APP_ID_HERE.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script>
+     function showProfileLink(fullName) {
+	 document.getElementById('profile-link').innerHTML = fullName;
+	 document.getElementById('profile-link').href  = "test";
+	 document.getElementById('profile-link').visibility = 'visible';
+     };
+     function unshowProfileLink() {
+	 document.getElementById('profile-link').innerHTML = "";
+	 document.getElementById('profile-link').href  = "/";
+	 document.getElementById('profile-link').visibility = 'hidden';
+     };
+    </script>
+    <!-------------------->
+  </head>
+  <body>
+    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script>
+      // Google Sign-In
+      function onSignIn(googleUser) {
+          // Useful data for your client-side scripts:
+          var profile = googleUser.getBasicProfile();
+          console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+          console.log('Full Name: ' + profile.getName());
+          console.log('Given Name: ' + profile.getGivenName());
+          console.log('Family Name: ' + profile.getFamilyName());
+          console.log("Image URL: " + profile.getImageUrl());
+          console.log("Email: " + profile.getEmail());
+	  
+          // The ID token you need to pass to your backend:
+          var id_token = googleUser.getAuthResponse().id_token;
+          console.log("ID Token: " + id_token);
+	  
+	  // Non-Google code:
+	  showProfileLink(profile.getName());
+      };
+    </script>
+    <a href="#" onclick="signOut();">Sign out</a><br>
+    <script>
+     function signOut() {
+	 // Google Code:
+         var auth2 = gapi.auth2.getAuthInstance();
+         auth2.signOut().then(function () {
+             console.log('User signed out.');
+         });
+
+	 // Non-Google Code:
+	 unshowProfileLink();
+     }
+    </script>
+    <a href="/" id="profile-link" visibility="hidden"></a>
+  </body>
+</html>
