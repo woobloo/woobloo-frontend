@@ -1,6 +1,6 @@
 import Tile from './Components/Tile.js'
 
-const gs = new WebSocket('ws://echo.websocket.org');
+const gs = new WebSocket('ws://159.203.237.59:8080');
 gs.onopen = (event) => {
   gs.send("Hello Tom");
 }
@@ -33,7 +33,7 @@ const TILES = [
 
 
 
-var isoGroup, cursorPos, cursor, arrowKeys;
+var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 BasicGame.Boot.prototype =
 {
@@ -47,6 +47,8 @@ BasicGame.Boot.prototype =
             game.load.image(TILES[i].name, TILES[i].imageFile);
         }
 
+        game.load.image("tile_info_bg", "images/tile_info.png");
+
         game.time.advancedTiming = true;
 
 
@@ -57,7 +59,17 @@ BasicGame.Boot.prototype =
         // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
         game.iso.anchor.setTo(0.5, 0.04);
 
+    },
 
+    renderHUD: function() {
+      hud = game.add.group();
+      infoPanel = game.add.text(window.innerWidth - 200, window.innerHeight - 50, "Grass Tile");
+      // hud.addChild(game.add.rectangle(window.innerWidth - 100, window.innerHeight - 200, 100, 200));
+      hud.addChild(infoPanel);
+
+      hud.fixedToCamera = true;
+
+      // game.add.image(0, 0, "grass")
     },
     create: function () {
 
@@ -75,6 +87,8 @@ BasicGame.Boot.prototype =
         cursorPos = new Phaser.Plugin.Isometric.Point3();
 
         arrowKeys = game.input.keyboard.createCursorKeys();
+
+        this.renderHUD();
     },
     update: function () {
         // Update the cursor position.
@@ -89,12 +103,28 @@ BasicGame.Boot.prototype =
             if (!tile.selected && inBounds) {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
+                // console.log(tile);
+
+                tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
+                tile.infoPanel.anchor = new Phaser.Point(0, 1);
+                tile.infoPanel.visible = false
+                setTimeout(() => {
+                  // tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
+                  if(tile.selected)
+                    tile.infoPanel.visible = true
+                }, 1000);
+                // game.add.image();
+
                 // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
                 tile.selected = false;
                 tile.tint = 0xffffff;
+
+                if(tile.infoPanel)
+                  tile.infoPanel.kill()
+
                 // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
         });

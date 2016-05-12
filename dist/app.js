@@ -98561,7 +98561,7 @@ var _Tile2 = _interopRequireDefault(_Tile);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var gs = new WebSocket('ws://echo.websocket.org');
+var gs = new WebSocket('ws://159.203.237.59:8080');
 gs.onopen = function (event) {
     gs.send("Hello Tom");
 };
@@ -98587,7 +98587,7 @@ var WORLD_WIDTH = MAP_SIDE * 1.9;
 var WORLD_HEIGHT = MAP_SIDE;
 var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
 
-var isoGroup, cursorPos, cursor, arrowKeys;
+var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 BasicGame.Boot.prototype = {
     getRandomInt: function getRandomInt(min, max) {
@@ -98600,6 +98600,8 @@ BasicGame.Boot.prototype = {
             game.load.image(TILES[i].name, TILES[i].imageFile);
         }
 
+        game.load.image("tile_info_bg", "images/tile_info.png");
+
         game.time.advancedTiming = true;
 
         // Add and enable the plug-in.
@@ -98608,6 +98610,17 @@ BasicGame.Boot.prototype = {
         // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
         // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
         game.iso.anchor.setTo(0.5, 0.04);
+    },
+
+    renderHUD: function renderHUD() {
+        hud = game.add.group();
+        infoPanel = game.add.text(window.innerWidth - 200, window.innerHeight - 50, "Grass Tile");
+        // hud.addChild(game.add.rectangle(window.innerWidth - 100, window.innerHeight - 200, 100, 200));
+        hud.addChild(infoPanel);
+
+        hud.fixedToCamera = true;
+
+        // game.add.image(0, 0, "grass")
     },
     create: function create() {
 
@@ -98625,6 +98638,8 @@ BasicGame.Boot.prototype = {
         cursorPos = new Phaser.Plugin.Isometric.Point3();
 
         arrowKeys = game.input.keyboard.createCursorKeys();
+
+        this.renderHUD();
     },
     update: function update() {
         // Update the cursor position.
@@ -98639,12 +98654,26 @@ BasicGame.Boot.prototype = {
             if (!tile.selected && inBounds) {
                 tile.selected = true;
                 tile.tint = 0x86bfda;
+                // console.log(tile);
+
+                tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg");
+                tile.infoPanel.anchor = new Phaser.Point(0, 1);
+                tile.infoPanel.visible = false;
+                setTimeout(function () {
+                    // tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
+                    if (tile.selected) tile.infoPanel.visible = true;
+                }, 1000);
+                // game.add.image();
+
                 // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
             }
             // If not, revert back to how it was.
             else if (tile.selected && !inBounds) {
                     tile.selected = false;
                     tile.tint = 0xffffff;
+
+                    if (tile.infoPanel) tile.infoPanel.kill();
+
                     // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
                 }
         });

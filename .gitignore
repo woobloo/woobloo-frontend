@@ -3,3 +3,5 @@
 
 # Remove node_modules
 node_modules/
+
+# Remove editor config files
