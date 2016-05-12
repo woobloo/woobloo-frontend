@@ -98585,11 +98585,15 @@ var MAP_TILES = 100;
 var MAP_SIDE = TILE_SIDE * MAP_TILES;
 var WORLD_WIDTH = MAP_SIDE * 1.9;
 var WORLD_HEIGHT = MAP_SIDE;
-var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png')];
+var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
 
 var isoGroup, cursorPos, cursor, arrowKeys;
 
 BasicGame.Boot.prototype = {
+    getRandomInt: function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    },
+
     preload: function preload() {
 
         for (var i in TILES) {
@@ -98667,7 +98671,7 @@ BasicGame.Boot.prototype = {
             for (var yy = 0; yy < MAP_SIDE; yy += TILE_SIDE) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                tile = game.add.isoSprite(xx, yy, 0, TILES[0].name, 0, isoGroup);
+                tile = game.add.isoSprite(xx, yy, 0, TILES[this.getRandomInt(0, TILES.length)].name, 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }
