@@ -98522,7 +98522,44 @@ process.chdir = function (dir) {
 process.umask = function() { return 0; };
 
 },{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Tile = function () {
+  _createClass(Tile, null, [{
+    key: "SIDE",
+    get: function get() {
+      return 64;
+    }
+  }]);
+
+  function Tile(name, imageFile) {
+    _classCallCheck(this, Tile);
+
+    this.name = name;
+    this.imageFile = imageFile;
+  }
+
+  return Tile;
+}();
+
+exports.default = Tile;
+
+},{}],6:[function(require,module,exports){
 'use strict';
+
+var _Tile = require('./Components/Tile.js');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var gs = new WebSocket('ws://echo.websocket.org');
 gs.onopen = function (event) {
@@ -98543,17 +98580,21 @@ var BasicGame = function BasicGame(game) {};
 
 BasicGame.Boot = function (game) {};
 
-var TILE_SIDE = 256;
-var MAP_TILES = 10;
+var TILE_SIDE = _Tile2.default.SIDE;
+var MAP_TILES = 100;
 var MAP_SIDE = TILE_SIDE * MAP_TILES;
 var WORLD_WIDTH = MAP_SIDE * 1.9;
 var WORLD_HEIGHT = MAP_SIDE;
+var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png')];
 
 var isoGroup, cursorPos, cursor, arrowKeys;
 
 BasicGame.Boot.prototype = {
     preload: function preload() {
-        game.load.image('grass', 'images/isometric/grass.png');
+
+        for (var i in TILES) {
+            game.load.image(TILES[i].name, TILES[i].imageFile);
+        }
 
         game.time.advancedTiming = true;
 
@@ -98626,7 +98667,7 @@ BasicGame.Boot.prototype = {
             for (var yy = 0; yy < MAP_SIDE; yy += TILE_SIDE) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                tile = game.add.isoSprite(xx, yy, 0, 'grass', 0, isoGroup);
+                tile = game.add.isoSprite(xx, yy, 0, TILES[0].name, 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }
@@ -98636,7 +98677,7 @@ BasicGame.Boot.prototype = {
 game.state.add('Boot', BasicGame.Boot);
 game.state.start('Boot');
 
-},{"./plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],6:[function(require,module,exports){
+},{"./Components/Tile.js":5,"./plugins/phaser-plugin-isometric.js":7,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],7:[function(require,module,exports){
 'use strict'; /**
 * The MIT License (MIT)
 
@@ -100047,5 +100088,5 @@ speed=this.distanceToXYZ(displayObject.body,x,y,z)/(maxTime/1000);}var a=this.an
     */moveToPointer:function moveToPointer(displayObject,speed,pointer,maxTime){pointer=pointer||this.game.input.activePointer;var isoPointer=this.game.iso.unproject(pointer.position,undefined,displayObject.body.z);isoPointer.z=displayObject.body.z;if(typeof speed==='undefined'){speed=60;}if(typeof maxTime==='undefined'){maxTime=0;}if(maxTime>0){ //  We know how many pixels we need to move, but how fast?
 speed=this.distanceToXYZ(displayObject.body,isoPointer.x,isoPointer.y,isoPointer.z)/(maxTime/1000);}var a=this.anglesToXYZ(displayObject.body,isoPointer.x,isoPointer.y,isoPointer.z);var v=this.velocityFromAngles(a.theta,a.phi,speed);displayObject.body.velocity.x=v.x;displayObject.body.velocity.y=v.y;return a.theta;}};Phaser.Physics.prototype.isoArcade=null;Phaser.Physics.prototype.parseConfig=function(_super){return function(){if(this.config.hasOwnProperty('isoArcade')&&this.config['isoArcade']===true&&Phaser.Plugin.Isometric.hasOwnProperty('IsoArcade')){this.isoArcade=new Phaser.Plugin.Isometric(this.game,this.config);}return _super.call(this);};}(Phaser.Physics.prototype.parseConfig);Phaser.Physics.prototype.startSystem=function(_super){return function(system){if(system===Phaser.Plugin.Isometric.ISOARCADE&&this.isoArcade===null){this.isoArcade=new Phaser.Plugin.Isometric.Arcade(this.game);this.setBoundsToWorld();}return _super.call(this,system);};}(Phaser.Physics.prototype.startSystem);Phaser.Physics.prototype.enable=function(_super){return function(sprite,system){if(system===Phaser.Plugin.Isometric.ISOARCADE&&this.isoArcade){this.isoArcade.enable(sprite);}return _super.call(this,sprite,system);};}(Phaser.Physics.prototype.enable);Phaser.Physics.prototype.setBoundsToWorld=function(_super){return function(){if(this.isoArcade){this.isoArcade.setBoundsToWorld();}return _super.call(this);};}(Phaser.Physics.prototype.setBoundsToWorld);Phaser.Physics.prototype.destroy=function(_super){return function(){this.isoArcade=null;return _super.call(this);};}(Phaser.Physics.prototype.destroy);
 
-},{}]},{},[5])
+},{}]},{},[6])
 //# sourceMappingURL=app.js.map

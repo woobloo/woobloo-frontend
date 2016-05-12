@@ -1,3 +1,5 @@
+import Tile from './Components/Tile.js'
+
 const gs = new WebSocket('ws://echo.websocket.org');
 gs.onopen = (event) => {
   gs.send("Hello Tom");
@@ -19,11 +21,15 @@ var BasicGame = function (game) { };
 
 BasicGame.Boot = function (game) { };
 
-const TILE_SIDE = 256;
-const MAP_TILES = 10;
+const TILE_SIDE = Tile.SIDE;
+const MAP_TILES = 100;
 const MAP_SIDE = TILE_SIDE * MAP_TILES;
 const WORLD_WIDTH = MAP_SIDE*1.9;
 const WORLD_HEIGHT = MAP_SIDE;
+const TILES = [
+  new Tile('grass', 'images/isometric/grass.png')
+]
+
 
 
 var isoGroup, cursorPos, cursor, arrowKeys;
@@ -31,7 +37,10 @@ var isoGroup, cursorPos, cursor, arrowKeys;
 BasicGame.Boot.prototype =
 {
     preload: function () {
-        game.load.image('grass', 'images/isometric/grass.png');
+
+        for(let i in TILES){
+            game.load.image(TILES[i].name, TILES[i].imageFile);
+        }
 
         game.time.advancedTiming = true;
 
@@ -113,7 +122,7 @@ BasicGame.Boot.prototype =
             for (var yy = 0; yy < MAP_SIDE; yy += TILE_SIDE) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                tile = game.add.isoSprite(xx, yy, 0, 'grass', 0, isoGroup);
+                tile = game.add.isoSprite(xx, yy, 0, TILES[0].name, 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }
