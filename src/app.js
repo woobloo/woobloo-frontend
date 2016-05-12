@@ -117,15 +117,15 @@ BasicGame.Boot.prototype =
              game.camera.x += 4;
          }
 
-         if(game.input.mousePointer.x <= window.innerWidth*0.1 ){
+         if(game.input.mousePointer.x <= window.innerWidth*0.02 ){
             game.camera.x -= 8;
-         } else if (game.input.mousePointer.x >= window.innerWidth*0.9) {
+         } else if (game.input.mousePointer.x >= window.innerWidth*0.98) {
             game.camera.x += 8;
          }
 
-         if(game.input.mousePointer.y <= window.innerHeight*0.1 ){
+         if(game.input.mousePointer.y <= window.innerHeight*0.02 ){
             game.camera.y -= 8;
-         } else if (game.input.mousePointer.y >= window.innerHeight*0.9) {
+         } else if (game.input.mousePointer.y >= window.innerHeight*0.98) {
             game.camera.y += 8;
          }
     },
