@@ -1,0 +1,5 @@
+# Emacs autosave files
+*~
+
+# Remove node_modules
+node_modules/
