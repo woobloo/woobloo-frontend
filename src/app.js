@@ -22,7 +22,7 @@ var BasicGame = function (game) { };
 BasicGame.Boot = function (game) { };
 
 const TILE_SIDE = Tile.SIDE;
-const MAP_TILES = 100;
+const MAP_TILES = 50;
 const MAP_SIDE = TILE_SIDE * MAP_TILES;
 const WORLD_WIDTH = MAP_SIDE*1.9;
 const WORLD_HEIGHT = MAP_SIDE;
@@ -115,6 +115,18 @@ BasicGame.Boot.prototype =
          else if (arrowKeys.right.isDown)
          {
              game.camera.x += 4;
+         }
+
+         if(game.input.mousePointer.x <= window.innerWidth*0.1 ){
+            game.camera.x -= 8;
+         } else if (game.input.mousePointer.x >= window.innerWidth*0.9) {
+            game.camera.x += 8;
+         }
+
+         if(game.input.mousePointer.y <= window.innerHeight*0.1 ){
+            game.camera.y -= 8;
+         } else if (game.input.mousePointer.y >= window.innerHeight*0.9) {
+            game.camera.y += 8;
          }
     },
     render: function () {

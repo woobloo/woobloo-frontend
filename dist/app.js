@@ -98581,7 +98581,7 @@ var BasicGame = function BasicGame(game) {};
 BasicGame.Boot = function (game) {};
 
 var TILE_SIDE = _Tile2.default.SIDE;
-var MAP_TILES = 100;
+var MAP_TILES = 50;
 var MAP_SIDE = TILE_SIDE * MAP_TILES;
 var WORLD_WIDTH = MAP_SIDE * 1.9;
 var WORLD_HEIGHT = MAP_SIDE;
@@ -98659,6 +98659,18 @@ BasicGame.Boot.prototype = {
             game.camera.x -= 4;
         } else if (arrowKeys.right.isDown) {
             game.camera.x += 4;
+        }
+
+        if (game.input.mousePointer.x <= window.innerWidth * 0.1) {
+            game.camera.x -= 8;
+        } else if (game.input.mousePointer.x >= window.innerWidth * 0.9) {
+            game.camera.x += 8;
+        }
+
+        if (game.input.mousePointer.y <= window.innerHeight * 0.1) {
+            game.camera.y -= 8;
+        } else if (game.input.mousePointer.y >= window.innerHeight * 0.9) {
+            game.camera.y += 8;
         }
     },
     render: function render() {
