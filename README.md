@@ -9,4 +9,5 @@ Ideally, this codebase will run independently and can be hosted using any static
 1. Clone repository
 2. Navigate to directory
 3. `npm install`
-4. `npm start`
+4. `npm test` (Unit testing is good)
+5. `npm start`
