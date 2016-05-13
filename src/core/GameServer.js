@@ -28,22 +28,17 @@ export default class GameServer extends EventEmitter{
       console.log("server connected");
       this._ws.send("aa");
       // this._ws.send("Hello Tom", {binary: true});
-      var buffer = new ArrayBuffer(128);
+      // var buffer = new ArrayBuffer(128);
       // this._ws.send(buffer);
     }
 
     this._ws.onmessage = (message) => {
       console.log("received message");
-      if(message.data instanceof ArrayBuffer) {
-        console.log(message.data);
-        // processArrayBuffer(msg.data);
-
-      } else {
-        console.log(message.data);
+        // console.log(JSON.parse(message.data));
         // processText(msg.data);
-      }
+      // }
 
-      emitEvent("newMessage", [message]); // TODO: emit message action as event
+      this.emitEvent("setup_data", [JSON.parse(message.data)]); // TODO: emit message action as event
     }
 
     this._ws.onerror = () => {
@@ -52,6 +47,7 @@ export default class GameServer extends EventEmitter{
 
     this._ws.onclose = () => {
       this.connected = false;
+      console.log("disconnected");
     }
   }
 

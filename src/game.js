@@ -20,6 +20,11 @@ var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 Woobloo.Boot.prototype =
 {
+    init: function({Players, Map}){
+      this._players = Players;
+      this._map = Map;
+    },
+
     getRandomInt: function(min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
     },
@@ -148,11 +153,12 @@ Woobloo.Boot.prototype =
     },
     spawnTiles: function () {
         var tile;
-        for (var xx = 0; xx < MAP_SIDE; xx += TILE_SIDE) {
-            for (var yy = 0; yy < MAP_SIDE; yy += TILE_SIDE) {
+        for (var xx = 0; xx < this._map.length; xx ++) {
+            for (var yy = 0; yy < this._map[0].length; yy ++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                tile = game.add.isoSprite(xx, yy, 0, TILES[this.getRandomInt(0, TILES.length)].name, 0, isoGroup);
+                let tileData = this._map[xx][yy];
+                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }

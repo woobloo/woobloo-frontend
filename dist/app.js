@@ -99048,7 +99048,9 @@ var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d
 
 gs.connect();
 
-_game2.default.state.start('Boot');
+gs.on('setup_data', function (setup_data) {
+  _game2.default.state.start('Boot', true, false, setup_data);
+});
 
 },{"./core/GameServer.js":9,"./core/SetupPhaser.js":10,"./game.js":11}],8:[function(require,module,exports){
 "use strict";
@@ -99121,21 +99123,17 @@ var GameServer = function (_EventEmitter) {
         console.log("server connected");
         _this2._ws.send("aa");
         // this._ws.send("Hello Tom", {binary: true});
-        var buffer = new ArrayBuffer(128);
+        // var buffer = new ArrayBuffer(128);
         // this._ws.send(buffer);
       };
 
       this._ws.onmessage = function (message) {
         console.log("received message");
-        if (message.data instanceof ArrayBuffer) {
-          console.log(message.data);
-          // processArrayBuffer(msg.data);
-        } else {
-            console.log(message.data);
-            // processText(msg.data);
-          }
+        // console.log(JSON.parse(message.data));
+        // processText(msg.data);
+        // }
 
-        emitEvent("newMessage", [message]); // TODO: emit message action as event
+        _this2.emitEvent("setup_data", [JSON.parse(message.data)]); // TODO: emit message action as event
       };
 
       this._ws.onerror = function () {
@@ -99144,6 +99142,7 @@ var GameServer = function (_EventEmitter) {
 
       this._ws.onclose = function () {
         _this2.connected = false;
+        console.log("disconnected");
       };
     }
   }, {
@@ -99214,6 +99213,14 @@ var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Til
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 Woobloo.Boot.prototype = {
+    init: function init(_ref) {
+        var Players = _ref.Players;
+        var Map = _ref.Map;
+
+        this._players = Players;
+        this._map = Map;
+    },
+
     getRandomInt: function getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min)) + min;
     },
@@ -99332,11 +99339,12 @@ Woobloo.Boot.prototype = {
     },
     spawnTiles: function spawnTiles() {
         var tile;
-        for (var xx = 0; xx < MAP_SIDE; xx += TILE_SIDE) {
-            for (var yy = 0; yy < MAP_SIDE; yy += TILE_SIDE) {
+        for (var xx = 0; xx < this._map.length; xx++) {
+            for (var yy = 0; yy < this._map[0].length; yy++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                tile = game.add.isoSprite(xx, yy, 0, TILES[this.getRandomInt(0, TILES.length)].name, 0, isoGroup);
+                var tileData = this._map[xx][yy];
+                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }
