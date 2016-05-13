@@ -1,6 +1,4 @@
-// import WebSocket from 'ws';
 import EventEmitter from 'wolfy87-eventemitter'
-// import binaryjs from 'binaryjs/'
 export default class GameServer extends EventEmitter{
 
   constructor(server, playerHash){
@@ -19,35 +17,27 @@ export default class GameServer extends EventEmitter{
     }
   }
   connect(){
-    // console.log()
-
     this._ws = new WebSocket(this._server + "/" + this._playerHash)
     this._ws.binaryType = "arraybuffer";
     this._ws.onopen = (event) => {
       this.connected = true;
-      console.log("server connected");
-      this._ws.send("aa");
-      // this._ws.send("Hello Tom", {binary: true});
-      // var buffer = new ArrayBuffer(128);
-      // this._ws.send(buffer);
+      this.emitEvent("connect");
     }
 
     this._ws.onmessage = (message) => {
-      console.log("received message");
-        // console.log(JSON.parse(message.data));
-        // processText(msg.data);
-      // }
-
-      this.emitEvent("setup_data", [JSON.parse(message.data)]); // TODO: emit message action as event
+      Promise.resolve(message)
+      .then(data => data.json())
+      .then(setup_data => this.emitEvent("setup_data", [setup_data])) // TODO: emit message action as event
+      .catch(err => this.emitEvent("error"))
     }
 
     this._ws.onerror = () => {
-      console.error("There was an issue connecting to the server.");
+      this.emitEvent("error");
     }
 
     this._ws.onclose = () => {
       this.connected = false;
-      console.log("disconnected");
+      this.emitEvent("disconnect")
     }
   }
 

@@ -99030,10 +99030,6 @@ exports.default = Tile;
 },{}],7:[function(require,module,exports){
 'use strict';
 
-var _GameServer = require('./core/GameServer.js');
-
-var _GameServer2 = _interopRequireDefault(_GameServer);
-
 var _SetupPhaser = require('./core/SetupPhaser.js');
 
 var _SetupPhaser2 = _interopRequireDefault(_SetupPhaser);
@@ -99042,11 +99038,26 @@ var _game = require('./game.js');
 
 var _game2 = _interopRequireDefault(_game);
 
+var _GameServer = require('./core/GameServer.js');
+
+var _GameServer2 = _interopRequireDefault(_GameServer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000"); // import Zlib from 'zlibjs'
-
+var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
 gs.connect();
+
+gs.on('connected', function () {
+  gs.dispatch(gs.Actions.getEverything());
+});
+
+gs.on('error', function () {
+  console.error("There was an error connecting to the server");
+});
+
+gs.on('disconnect', function () {
+  console.log("Server Disconnected");
+});
 
 gs.on('setup_data', function (setup_data) {
   _game2.default.state.start('Boot', true, false, setup_data);
@@ -99080,10 +99091,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import WebSocket from 'ws';
-
-
-// import binaryjs from 'binaryjs/'
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var GameServer = function (_EventEmitter) {
   _inherits(GameServer, _EventEmitter);
@@ -99114,35 +99122,31 @@ var GameServer = function (_EventEmitter) {
     value: function connect() {
       var _this2 = this;
 
-      // console.log()
-
       this._ws = new WebSocket(this._server + "/" + this._playerHash);
       this._ws.binaryType = "arraybuffer";
       this._ws.onopen = function (event) {
         _this2.connected = true;
-        console.log("server connected");
-        _this2._ws.send("aa");
-        // this._ws.send("Hello Tom", {binary: true});
-        // var buffer = new ArrayBuffer(128);
-        // this._ws.send(buffer);
+        _this2.emitEvent("connect");
       };
 
       this._ws.onmessage = function (message) {
-        console.log("received message");
-        // console.log(JSON.parse(message.data));
-        // processText(msg.data);
-        // }
-
-        _this2.emitEvent("setup_data", [JSON.parse(message.data)]); // TODO: emit message action as event
+        Promise.resolve(message).then(function (data) {
+          return data.json();
+        }).then(function (setup_data) {
+          return _this2.emitEvent("setup_data", [setup_data]);
+        }) // TODO: emit message action as event
+        .catch(function (err) {
+          return _this2.emitEvent("error");
+        });
       };
 
       this._ws.onerror = function () {
-        console.error("There was an issue connecting to the server.");
+        _this2.emitEvent("error");
       };
 
       this._ws.onclose = function () {
         _this2.connected = false;
-        console.log("disconnected");
+        _this2.emitEvent("disconnect");
       };
     }
   }, {
