@@ -1,13 +1,9 @@
 import Tile from './Components/Tile.js'
+import Zlib from 'zlibjs'
+import GameServer from './core/GameServer.js'
 
-const gs = new WebSocket('ws://159.203.237.59:8080');
-gs.onopen = (event) => {
-  gs.send("Hello Tom");
-}
-gs.onmessage = (message) => {
-  console.log(message);
-}
-
+const gs = new GameServer('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
+gs.connect();
 
 window.PIXI = require('phaser/build/custom/pixi')
 window.p2 = require('phaser/build/custom/p2')
@@ -63,7 +59,7 @@ BasicGame.Boot.prototype =
 
     renderHUD: function() {
       hud = game.add.group();
-      infoPanel = game.add.text(window.innerWidth - 200, window.innerHeight - 50, "Grass Tile");
+      infoPanel = game.add.text(window.innerWidth - 200, window.innerHeight - 50, "Test HUD");
       // hud.addChild(game.add.rectangle(window.innerWidth - 100, window.innerHeight - 200, 100, 200));
       hud.addChild(infoPanel);
 
