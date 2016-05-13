@@ -11,3 +11,8 @@ Ideally, this codebase will run independently and can be hosted using any static
 3. `npm install`
 4. `npm test` (Unit testing is good)
 5. `npm start`
+
+## Tools
+
+* `npm test`
+* `npm run docs`
