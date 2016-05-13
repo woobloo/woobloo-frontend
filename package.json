@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "phaser": "^2.4.7",
+    "wolfy87-eventemitter": "^5.0.0",
     "zlibjs": "^0.2.0"
   }
 }
