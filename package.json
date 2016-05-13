@@ -36,7 +36,9 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "bufferutil": "^1.2.1",
     "phaser": "^2.4.7",
+    "utf-8-validate": "^1.2.1",
     "wolfy87-eventemitter": "^5.0.0",
     "zlibjs": "^0.2.0"
   }

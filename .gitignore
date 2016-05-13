@@ -5,3 +5,7 @@
 node_modules/
 
 # Remove editor config files
+.tern-project
+
+# Remoce DS_Store
+.DS_Store
