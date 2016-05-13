@@ -98997,413 +98997,6 @@ process.umask = function() { return 0; };
 }.call(this));
 
 },{}],6:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Tile = function () {
-  _createClass(Tile, null, [{
-    key: "SIDE",
-    get: function get() {
-      return 64;
-    }
-  }]);
-
-  function Tile(name, imageFile) {
-    _classCallCheck(this, Tile);
-
-    this.name = name;
-    this.imageFile = imageFile;
-  }
-
-  return Tile;
-}();
-
-exports.default = Tile;
-
-},{}],7:[function(require,module,exports){
-'use strict';
-
-var _SetupPhaser = require('./core/SetupPhaser.js');
-
-var _SetupPhaser2 = _interopRequireDefault(_SetupPhaser);
-
-var _game = require('./game.js');
-
-var _game2 = _interopRequireDefault(_game);
-
-var _GameServer = require('./core/GameServer.js');
-
-var _GameServer2 = _interopRequireDefault(_GameServer);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
-gs.connect();
-
-gs.on('connected', function () {
-  gs.dispatch(gs.Actions.getEverything());
-});
-
-gs.on('error', function () {
-  console.error("There was an error connecting to the server");
-});
-
-gs.on('disconnect', function () {
-  console.log("Server Disconnected");
-});
-
-gs.on('setup_data', function (setup_data) {
-  _game2.default.state.start('Boot', true, false, setup_data);
-});
-
-},{"./core/GameServer.js":9,"./core/SetupPhaser.js":10,"./game.js":11}],8:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-var STAGE_WIDTH = exports.STAGE_WIDTH = window.innerWidth;
-var STAGE_HEIGHT = exports.STAGE_HEIGHT = window.innerHeight;
-
-},{}],9:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _wolfy87Eventemitter = require("wolfy87-eventemitter");
-
-var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * The GameServer Class is the primary way to communicate with a Game Server.
- * It uses WebSockets to implement bi-directional communication.
- * It extends EventEmitter which means you can subscribe to GameServer events.
- * @extends EventEmitter
- */
-
-var GameServer = function (_EventEmitter) {
-  _inherits(GameServer, _EventEmitter);
-
-  /**
-   * Creates a GameServer
-   *
-   * @param  {string} server - Hostname/IP (prepended with a "ws://") of game
-   * server.
-   * @param {string} playerHash - Unique Hash that represents the player.
-   */
-
-  function GameServer(server, playerHash) {
-    _classCallCheck(this, GameServer);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameServer).call(this));
-
-    _this._server = server;
-    _this._playerHash = playerHash;
-    _this.connected = false;
-
-    _this.Constants = {
-      GET_EVERYTHING: "GET_EVERYTHING"
-    };
-
-    _this.Actions = {
-      getEverything: function getEverything() {
-        return { type: _this.Constants.GET_EVERYTHING };
-      }
-    };
-    return _this;
-  }
-
-  /**
-   * Connect to the Game Server
-   */
-
-
-  _createClass(GameServer, [{
-    key: "connect",
-    value: function connect() {
-      var _this2 = this;
-
-      this._ws = new WebSocket(this._server + "/" + this._playerHash);
-      this._ws.binaryType = "arraybuffer";
-      this._ws.onopen = function (event) {
-        _this2.connected = true;
-        _this2.emitEvent("connect");
-      };
-
-      this._ws.onmessage = function (message) {
-        Promise.resolve(message).then(function (data) {
-          return data.json();
-        }).then(function (setup_data) {
-          return _this2.emitEvent("setup_data", [setup_data]);
-        }) // TODO: emit message action as event
-        .catch(function (err) {
-          return _this2.emitEvent("error");
-        });
-      };
-
-      this._ws.onerror = function () {
-        _this2.emitEvent("error");
-      };
-
-      this._ws.onclose = function () {
-        _this2.connected = false;
-        _this2.emitEvent("disconnect");
-      };
-    }
-
-    /**
-     * Send a plain text message to the Game Server.
-     * You should almost certainly never have to use this publically.
-     *
-     * @param {string} message - Message to send.
-     */
-
-  }, {
-    key: "send",
-    value: function send(message) {
-      this._ws.send(message);
-    }
-
-    /**
-     * Generate protocol prefix from protocol Array.
-     *
-     * Convert array of ASCII indices to a string with the respective ASCII values.
-     *
-     * @param {Array} protocol - ASCII table indices.
-     * @return {string} the rotocol prefix string.
-     */
-
-  }, {
-    key: "getProtocolString",
-    value: function getProtocolString(protocol) {
-      return protocol.reduce(function (string, int) {
-        return string + String.fromCharCode(int);
-      }, "");
-    }
-
-    /**
-     * Dispatch an action to the GameServer
-     *
-     * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.
-     */
-
-  }, {
-    key: "dispatch",
-    value: function dispatch(action) {
-      switch (action.type) {
-        case this.Constants.GET_EVERYTHING:
-          this.send(this.getProtocolString[(0, 0, 0, 1)]);
-          break;
-        default:
-          break;
-
-      }
-    }
-  }]);
-
-  return GameServer;
-}(_wolfy87Eventemitter2.default);
-
-exports.default = GameServer;
-
-},{"wolfy87-eventemitter":5}],10:[function(require,module,exports){
-'use strict';
-
-window.PIXI = require('phaser/build/custom/pixi');
-window.p2 = require('phaser/build/custom/p2');
-window.Phaser = require('phaser/build/custom/phaser-split');
-require("./../plugins/phaser-plugin-isometric.js");
-
-},{"./../plugins/phaser-plugin-isometric.js":12,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],11:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _config = require('./config.js');
-
-var _Tile = require('./Components/Tile.js');
-
-var _Tile2 = _interopRequireDefault(_Tile);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);
-var Woobloo = function Woobloo(game) {};
-Woobloo.Boot = function (game) {};
-
-var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
-
-var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
-
-Woobloo.Boot.prototype = {
-    init: function init(_ref) {
-        var Players = _ref.Players;
-        var Map = _ref.Map;
-
-        this._players = Players;
-        this._map = Map;
-        this._map_tiles = this._map.length;
-        this._map_side = _Tile2.default.SIDE * this._map_tiles;
-        this._world_width = this._map_side * 1.9;
-        this._world_height = this._map_side;
-    },
-
-    getRandomInt: function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    },
-
-    preload: function preload() {
-
-        for (var i in TILES) {
-            game.load.image(TILES[i].name, TILES[i].imageFile);
-        }
-
-        game.load.image("tile_info_bg", "images/tile_info.png");
-
-        game.time.advancedTiming = true;
-
-        // Add and enable the plug-in.
-        game.plugins.add(new Phaser.Plugin.Isometric(game));
-
-        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
-        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
-        game.iso.anchor.setTo(0.5, 0.04);
-    },
-
-    renderHUD: function renderHUD() {
-        hud = game.add.group();
-        infoPanel = game.add.text(_config.STAGE_WIDTH - 200, _config.STAGE_HEIGHT - 50, "Test HUD");
-        // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));
-        hud.addChild(infoPanel);
-
-        hud.fixedToCamera = true;
-
-        // game.add.image(0, 0, "grass")
-    },
-    create: function create() {
-
-        game.world.setBounds(0, 0, this._world_width, this._world_height);
-        game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
-        game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
-
-        // Create a group for our tiles.
-        isoGroup = game.add.group();
-
-        // Let's make a load of tiles on a grid.
-        this.spawnTiles();
-
-        // Provide a 3D position for the cursor
-        cursorPos = new Phaser.Plugin.Isometric.Point3();
-
-        arrowKeys = game.input.keyboard.createCursorKeys();
-
-        this.renderHUD();
-    },
-    update: function update() {
-        // Update the cursor position.
-        // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily
-        // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.
-        game.iso.unproject(game.input.activePointer.position, cursorPos);
-
-        // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
-        isoGroup.forEach(function (tile) {
-            var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
-            // If it does, do a little animation and tint change.
-            if (!tile.selected && inBounds) {
-                tile.selected = true;
-                tile.tint = 0x86bfda;
-                // console.log(tile);
-
-                tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg");
-                tile.infoPanel.anchor = new Phaser.Point(0, 1);
-                tile.infoPanel.visible = false;
-                setTimeout(function () {
-                    // tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
-                    if (tile.selected) tile.infoPanel.visible = true;
-                }, 1000);
-                // game.add.image();
-
-                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
-            }
-            // If not, revert back to how it was.
-            else if (tile.selected && !inBounds) {
-                    tile.selected = false;
-                    tile.tint = 0xffffff;
-
-                    if (tile.infoPanel) tile.infoPanel.kill();
-
-                    // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
-                }
-        });
-
-        if (arrowKeys.up.isDown) {
-            game.camera.y -= 4;
-        } else if (arrowKeys.down.isDown) {
-            game.camera.y += 4;
-        }
-
-        if (arrowKeys.left.isDown) {
-            game.camera.x -= 4;
-        } else if (arrowKeys.right.isDown) {
-            game.camera.x += 4;
-        }
-
-        if (game.input.mousePointer.x <= _config.STAGE_WIDTH * 0.02) {
-            game.camera.x -= 8;
-        } else if (game.input.mousePointer.x >= _config.STAGE_WIDTH * 0.98) {
-            game.camera.x += 8;
-        }
-
-        if (game.input.mousePointer.y <= _config.STAGE_HEIGHT * 0.02) {
-            game.camera.y -= 8;
-        } else if (game.input.mousePointer.y >= _config.STAGE_HEIGHT * 0.98) {
-            game.camera.y += 8;
-        }
-    },
-    render: function render() {
-        game.debug.text('FPS: ' + game.time.fps || '--', 4, 20, "#bbb");
-        game.debug.cameraInfo(game.camera, 32, 32);
-    },
-    spawnTiles: function spawnTiles() {
-        var tile;
-        for (var xx = 0; xx < this._map_tiles; xx++) {
-            for (var yy = 0; yy < this._map_tiles; yy++) {
-                // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                // The last parameter is the group you want to add it to (just like game.add.sprite)
-                var tileData = this._map[xx][yy];
-                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
-                tile.anchor.set(0.5, 0);
-            }
-        }
-    }
-};
-
-game.state.add('Boot', Woobloo.Boot);
-
-exports.default = game;
-
-},{"./Components/Tile.js":6,"./config.js":8}],12:[function(require,module,exports){
 'use strict'; /**
 * The MIT License (MIT)
 
@@ -100814,5 +100407,412 @@ speed=this.distanceToXYZ(displayObject.body,x,y,z)/(maxTime/1000);}var a=this.an
     */moveToPointer:function moveToPointer(displayObject,speed,pointer,maxTime){pointer=pointer||this.game.input.activePointer;var isoPointer=this.game.iso.unproject(pointer.position,undefined,displayObject.body.z);isoPointer.z=displayObject.body.z;if(typeof speed==='undefined'){speed=60;}if(typeof maxTime==='undefined'){maxTime=0;}if(maxTime>0){ //  We know how many pixels we need to move, but how fast?
 speed=this.distanceToXYZ(displayObject.body,isoPointer.x,isoPointer.y,isoPointer.z)/(maxTime/1000);}var a=this.anglesToXYZ(displayObject.body,isoPointer.x,isoPointer.y,isoPointer.z);var v=this.velocityFromAngles(a.theta,a.phi,speed);displayObject.body.velocity.x=v.x;displayObject.body.velocity.y=v.y;return a.theta;}};Phaser.Physics.prototype.isoArcade=null;Phaser.Physics.prototype.parseConfig=function(_super){return function(){if(this.config.hasOwnProperty('isoArcade')&&this.config['isoArcade']===true&&Phaser.Plugin.Isometric.hasOwnProperty('IsoArcade')){this.isoArcade=new Phaser.Plugin.Isometric(this.game,this.config);}return _super.call(this);};}(Phaser.Physics.prototype.parseConfig);Phaser.Physics.prototype.startSystem=function(_super){return function(system){if(system===Phaser.Plugin.Isometric.ISOARCADE&&this.isoArcade===null){this.isoArcade=new Phaser.Plugin.Isometric.Arcade(this.game);this.setBoundsToWorld();}return _super.call(this,system);};}(Phaser.Physics.prototype.startSystem);Phaser.Physics.prototype.enable=function(_super){return function(sprite,system){if(system===Phaser.Plugin.Isometric.ISOARCADE&&this.isoArcade){this.isoArcade.enable(sprite);}return _super.call(this,sprite,system);};}(Phaser.Physics.prototype.enable);Phaser.Physics.prototype.setBoundsToWorld=function(_super){return function(){if(this.isoArcade){this.isoArcade.setBoundsToWorld();}return _super.call(this);};}(Phaser.Physics.prototype.setBoundsToWorld);Phaser.Physics.prototype.destroy=function(_super){return function(){this.isoArcade=null;return _super.call(this);};}(Phaser.Physics.prototype.destroy);
 
-},{}]},{},[7])
+},{}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Tile = function () {
+  _createClass(Tile, null, [{
+    key: "SIDE",
+    get: function get() {
+      return 64;
+    }
+  }]);
+
+  function Tile(name, imageFile) {
+    _classCallCheck(this, Tile);
+
+    this.name = name;
+    this.imageFile = imageFile;
+  }
+
+  return Tile;
+}();
+
+exports.default = Tile;
+
+},{}],8:[function(require,module,exports){
+'use strict';
+
+var _SetupPhaser = require('./core/SetupPhaser.js');
+
+var _SetupPhaser2 = _interopRequireDefault(_SetupPhaser);
+
+var _game = require('./game.js');
+
+var _game2 = _interopRequireDefault(_game);
+
+var _GameServer = require('./core/GameServer.js');
+
+var _GameServer2 = _interopRequireDefault(_GameServer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
+gs.connect();
+
+gs.on('connected', function () {
+  gs.dispatch(gs.Actions.getEverything());
+});
+
+gs.on('error', function () {
+  console.error("There was an error connecting to the server");
+});
+
+gs.on('disconnect', function () {
+  console.log("Server Disconnected");
+});
+
+gs.on('setup_data', function (setup_data) {
+  _game2.default.state.start('Boot', true, false, setup_data);
+});
+
+},{"./core/GameServer.js":10,"./core/SetupPhaser.js":11,"./game.js":12}],9:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var STAGE_WIDTH = exports.STAGE_WIDTH = window.innerWidth;
+var STAGE_HEIGHT = exports.STAGE_HEIGHT = window.innerHeight;
+
+},{}],10:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _wolfy87Eventemitter = require("wolfy87-eventemitter");
+
+var _wolfy87Eventemitter2 = _interopRequireDefault(_wolfy87Eventemitter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The GameServer Class is the primary way to communicate with a Game Server.
+ * It uses WebSockets to implement bi-directional communication.
+ * It extends EventEmitter which means you can subscribe to GameServer events.
+ * @extends EventEmitter
+ */
+
+var GameServer = function (_EventEmitter) {
+  _inherits(GameServer, _EventEmitter);
+
+  /**
+   * Creates a GameServer
+   *
+   * @param  {string} server - Hostname/IP (prepended with a "ws://") of game
+   * server.
+   * @param {string} playerHash - Unique Hash that represents the player.
+   */
+
+  function GameServer(server, playerHash) {
+    _classCallCheck(this, GameServer);
+
+    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(GameServer).call(this));
+
+    _this._server = server;
+    _this._playerHash = playerHash;
+    _this.connected = false;
+
+    _this.Constants = {
+      GET_EVERYTHING: "GET_EVERYTHING"
+    };
+
+    _this.Actions = {
+      getEverything: function getEverything() {
+        return { type: _this.Constants.GET_EVERYTHING };
+      }
+    };
+    return _this;
+  }
+
+  /**
+   * Connect to the Game Server
+   */
+
+
+  _createClass(GameServer, [{
+    key: "connect",
+    value: function connect() {
+      var _this2 = this;
+
+      this._ws = new WebSocket(this._server + "/" + this._playerHash);
+      this._ws.binaryType = "arraybuffer";
+      this._ws.onopen = function (event) {
+        _this2.connected = true;
+        _this2.emitEvent("connect");
+      };
+
+      this._ws.onmessage = function (message) {
+        Promise.resolve(message).then(function (data) {
+          return data.json();
+        }).then(function (setup_data) {
+          return _this2.emitEvent("setup_data", [setup_data]);
+        }) // TODO: emit message action as event
+        .catch(function (err) {
+          return _this2.emitEvent("error");
+        });
+      };
+
+      this._ws.onerror = function () {
+        _this2.emitEvent("error");
+      };
+
+      this._ws.onclose = function () {
+        _this2.connected = false;
+        _this2.emitEvent("disconnect");
+      };
+    }
+
+    /**
+     * Send a plain text message to the Game Server.
+     * You should almost certainly never have to use this publically.
+     *
+     * @param {string} message - Message to send.
+     */
+
+  }, {
+    key: "send",
+    value: function send(message) {
+      this._ws.send(message);
+    }
+
+    /**
+     * Generate protocol prefix from protocol Array.
+     *
+     * Convert array of ASCII indices to a string with the respective ASCII values.
+     *
+     * @param {Array} protocol - ASCII table indices.
+     * @return {string} the rotocol prefix string.
+     */
+
+  }, {
+    key: "getProtocolString",
+    value: function getProtocolString(protocol) {
+      return protocol.reduce(function (string, int) {
+        return string + String.fromCharCode(int);
+      }, "");
+    }
+
+    /**
+     * Dispatch an action to the GameServer
+     *
+     * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.
+     */
+
+  }, {
+    key: "dispatch",
+    value: function dispatch(action) {
+      switch (action.type) {
+        case this.Constants.GET_EVERYTHING:
+          this.send(this.getProtocolString[(0, 0, 0, 1)]);
+          break;
+        default:
+          break;
+
+      }
+    }
+  }]);
+
+  return GameServer;
+}(_wolfy87Eventemitter2.default);
+
+exports.default = GameServer;
+
+},{"wolfy87-eventemitter":5}],11:[function(require,module,exports){
+'use strict';
+
+window.PIXI = require('phaser/build/custom/pixi');
+window.p2 = require('phaser/build/custom/p2');
+window.Phaser = require('phaser/build/custom/phaser-split');
+require("./../../plugins/phaser-plugin-isometric.js");
+
+},{"./../../plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _config = require('./config.js');
+
+var _Tile = require('./Components/Tile.js');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);
+var Woobloo = function Woobloo(game) {};
+Woobloo.Boot = function (game) {};
+
+var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
+
+var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
+
+Woobloo.Boot.prototype = {
+    init: function init(_ref) {
+        var Players = _ref.Players;
+        var Map = _ref.Map;
+
+        this._players = Players;
+        this._map = Map;
+        this._map_tiles = this._map.length;
+        this._map_side = _Tile2.default.SIDE * this._map_tiles;
+        this._world_width = this._map_side * 1.9;
+        this._world_height = this._map_side;
+    },
+
+    getRandomInt: function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    },
+
+    preload: function preload() {
+
+        for (var i in TILES) {
+            game.load.image(TILES[i].name, TILES[i].imageFile);
+        }
+
+        game.load.image("tile_info_bg", "images/tile_info.png");
+
+        game.time.advancedTiming = true;
+
+        // Add and enable the plug-in.
+        game.plugins.add(new Phaser.Plugin.Isometric(game));
+
+        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
+        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
+        game.iso.anchor.setTo(0.5, 0.04);
+    },
+
+    renderHUD: function renderHUD() {
+        hud = game.add.group();
+        infoPanel = game.add.text(_config.STAGE_WIDTH - 200, _config.STAGE_HEIGHT - 50, "Test HUD");
+        // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));
+        hud.addChild(infoPanel);
+
+        hud.fixedToCamera = true;
+
+        // game.add.image(0, 0, "grass")
+    },
+    create: function create() {
+
+        game.world.setBounds(0, 0, this._world_width, this._world_height);
+        game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
+        game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
+
+        // Create a group for our tiles.
+        isoGroup = game.add.group();
+
+        // Let's make a load of tiles on a grid.
+        this.spawnTiles();
+
+        // Provide a 3D position for the cursor
+        cursorPos = new Phaser.Plugin.Isometric.Point3();
+
+        arrowKeys = game.input.keyboard.createCursorKeys();
+
+        this.renderHUD();
+    },
+    update: function update() {
+        // Update the cursor position.
+        // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily
+        // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.
+        game.iso.unproject(game.input.activePointer.position, cursorPos);
+
+        // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
+        isoGroup.forEach(function (tile) {
+            var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
+            // If it does, do a little animation and tint change.
+            if (!tile.selected && inBounds) {
+                tile.selected = true;
+                tile.tint = 0x86bfda;
+                // console.log(tile);
+
+                tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg");
+                tile.infoPanel.anchor = new Phaser.Point(0, 1);
+                tile.infoPanel.visible = false;
+                setTimeout(function () {
+                    // tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
+                    if (tile.selected) tile.infoPanel.visible = true;
+                }, 1000);
+                // game.add.image();
+
+                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
+            }
+            // If not, revert back to how it was.
+            else if (tile.selected && !inBounds) {
+                    tile.selected = false;
+                    tile.tint = 0xffffff;
+
+                    if (tile.infoPanel) tile.infoPanel.kill();
+
+                    // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
+                }
+        });
+
+        if (arrowKeys.up.isDown) {
+            game.camera.y -= 4;
+        } else if (arrowKeys.down.isDown) {
+            game.camera.y += 4;
+        }
+
+        if (arrowKeys.left.isDown) {
+            game.camera.x -= 4;
+        } else if (arrowKeys.right.isDown) {
+            game.camera.x += 4;
+        }
+
+        if (game.input.mousePointer.x <= _config.STAGE_WIDTH * 0.02) {
+            game.camera.x -= 8;
+        } else if (game.input.mousePointer.x >= _config.STAGE_WIDTH * 0.98) {
+            game.camera.x += 8;
+        }
+
+        if (game.input.mousePointer.y <= _config.STAGE_HEIGHT * 0.02) {
+            game.camera.y -= 8;
+        } else if (game.input.mousePointer.y >= _config.STAGE_HEIGHT * 0.98) {
+            game.camera.y += 8;
+        }
+    },
+    render: function render() {
+        game.debug.text('FPS: ' + game.time.fps || '--', 4, 20, "#bbb");
+        game.debug.cameraInfo(game.camera, 32, 32);
+    },
+    spawnTiles: function spawnTiles() {
+        var tile;
+        for (var xx = 0; xx < this._map_tiles; xx++) {
+            for (var yy = 0; yy < this._map_tiles; yy++) {
+                // Create a tile using the new game.add.isoSprite factory method at the specified position.
+                // The last parameter is the group you want to add it to (just like game.add.sprite)
+                var tileData = this._map[xx][yy];
+                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
+                tile.anchor.set(0.5, 0);
+            }
+        }
+    }
+};
+
+game.state.add('Boot', Woobloo.Boot);
+
+exports.default = game;
+
+},{"./Components/Tile.js":7,"./config.js":9}]},{},[8])
 //# sourceMappingURL=app.js.map

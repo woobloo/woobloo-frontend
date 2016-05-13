@@ -462,12 +462,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/plugins/phaser-plugin-isometric.js",
-    "file/src/plugins/phaser-plugin-isometric.js.html",
-    "src/plugins/phaser-plugin-isometric.js",
-    "file"
-  ],
-  [
     "src/spec/gameserver.js",
     "file/src/spec/GameServer.js.html",
     "src/spec/GameServer.js",

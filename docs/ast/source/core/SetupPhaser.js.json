@@ -461,11 +461,11 @@
         "arguments": [
           {
             "type": "Literal",
-            "value": "./../plugins/phaser-plugin-isometric.js",
-            "raw": "\"./../plugins/phaser-plugin-isometric.js\"",
+            "value": "./../../plugins/phaser-plugin-isometric.js",
+            "raw": "\"./../../plugins/phaser-plugin-isometric.js\"",
             "range": [
               164,
-              205
+              208
             ],
             "loc": {
               "start": {
@@ -474,14 +474,14 @@
               },
               "end": {
                 "line": 4,
-                "column": 49
+                "column": 52
               }
             }
           }
         ],
         "range": [
           156,
-          206
+          209
         ],
         "loc": {
           "start": {
@@ -490,13 +490,13 @@
           },
           "end": {
             "line": 4,
-            "column": 50
+            "column": 53
           }
         }
       },
       "range": [
         156,
-        207
+        210
       ],
       "loc": {
         "start": {
@@ -513,7 +513,7 @@
   "sourceType": "module",
   "range": [
     0,
-    207
+    210
   ],
   "loc": {
     "start": {
