@@ -99093,8 +99093,23 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+/**
+ * The GameServer Class is the primary way to communicate with a Game Server.
+ * It uses WebSockets to implement bi-directional communication.
+ * It extends EventEmitter which means you can subscribe to GameServer events.
+ * @extends EventEmitter
+ */
+
 var GameServer = function (_EventEmitter) {
   _inherits(GameServer, _EventEmitter);
+
+  /**
+   * Creates a GameServer
+   *
+   * @param  {string} server - Hostname/IP (prepended with a "ws://") of game
+   * server.
+   * @param {string} playerHash - Unique Hash that represents the player.
+   */
 
   function GameServer(server, playerHash) {
     _classCallCheck(this, GameServer);
@@ -99116,6 +99131,11 @@ var GameServer = function (_EventEmitter) {
     };
     return _this;
   }
+
+  /**
+   * Connect to the Game Server
+   */
+
 
   _createClass(GameServer, [{
     key: "connect",
@@ -99149,18 +99169,43 @@ var GameServer = function (_EventEmitter) {
         _this2.emitEvent("disconnect");
       };
     }
+
+    /**
+     * Send a plain text message to the Game Server.
+     * You should almost certainly never have to use this publically.
+     *
+     * @param {string} message - Message to send.
+     */
+
   }, {
     key: "send",
     value: function send(message) {
       this._ws.send(message);
     }
+
+    /**
+     * Generate protocol prefix from protocol Array.
+     *
+     * Convert array of ASCII indices to a string with the respective ASCII values.
+     *
+     * @param {Array} protocol - ASCII table indices.
+     * @return {string} the rotocol prefix string.
+     */
+
   }, {
     key: "getProtocolString",
-    value: function getProtocolString(protocol_array) {
-      return protocol_array.reduce(function (string, int) {
+    value: function getProtocolString(protocol) {
+      return protocol.reduce(function (string, int) {
         return string + String.fromCharCode(int);
       }, "");
     }
+
+    /**
+     * Dispatch an action to the GameServer
+     *
+     * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.
+     */
+
   }, {
     key: "dispatch",
     value: function dispatch(action) {

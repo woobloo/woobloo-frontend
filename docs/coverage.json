@@ -1,0 +1,35 @@
+{
+  "coverage": "37.5%",
+  "expectCount": 16,
+  "actualCount": 6,
+  "files": {
+    "src/core/GameServer.js": {
+      "expectCount": 9,
+      "actualCount": 6,
+      "undocumentLines": [
+        28,
+        24,
+        22
+      ]
+    },
+    "src/Components/Tile.js": {
+      "expectCount": 5,
+      "actualCount": 0,
+      "undocumentLines": [
+        2,
+        1,
+        4,
+        6,
+        5
+      ]
+    },
+    "src/config.js": {
+      "expectCount": 2,
+      "actualCount": 0,
+      "undocumentLines": [
+        2,
+        1
+      ]
+    }
+  }
+}

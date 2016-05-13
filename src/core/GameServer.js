@@ -1,9 +1,22 @@
+"use strict";
 import EventEmitter from 'wolfy87-eventemitter'
-export default class GameServer extends EventEmitter{
 
+/**
+ * The GameServer Class is the primary way to communicate with a Game Server.
+ * It uses WebSockets to implement bi-directional communication.
+ * It extends EventEmitter which means you can subscribe to GameServer events.
+ * @extends EventEmitter
+ */
+class GameServer extends EventEmitter{
+  /**
+   * Creates a GameServer
+   *
+   * @param  {string} server - Hostname/IP (prepended with a "ws://") of game
+   * server.
+   * @param {string} playerHash - Unique Hash that represents the player.
+   */
   constructor(server, playerHash){
     super()
-
     this._server = server;
     this._playerHash = playerHash;
     this.connected = false;
@@ -16,6 +29,10 @@ export default class GameServer extends EventEmitter{
       getEverything: () => ({type: this.Constants.GET_EVERYTHING})
     }
   }
+
+  /**
+   * Connect to the Game Server
+   */
   connect(){
     this._ws = new WebSocket(this._server + "/" + this._playerHash)
     this._ws.binaryType = "arraybuffer";
@@ -41,14 +58,33 @@ export default class GameServer extends EventEmitter{
     }
   }
 
+  /**
+   * Send a plain text message to the Game Server.
+   * You should almost certainly never have to use this publically.
+   *
+   * @param {string} message - Message to send.
+   */
   send(message){
     this._ws.send(message)
   }
 
-  getProtocolString(protocol_array){
-    return protocol_array.reduce((string, int) => (string + String.fromCharCode(int)), "")
+  /**
+   * Generate protocol prefix from protocol Array.
+   *
+   * Convert array of ASCII indices to a string with the respective ASCII values.
+   *
+   * @param {Array} protocol - ASCII table indices.
+   * @return {string} the rotocol prefix string.
+   */
+  getProtocolString(protocol){
+    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), "")
   }
 
+  /**
+   * Dispatch an action to the GameServer
+   *
+   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.
+   */
   dispatch(action){
     switch (action.type){
       case this.Constants.GET_EVERYTHING:
@@ -60,3 +96,5 @@ export default class GameServer extends EventEmitter{
     }
   }
 }
+
+export default GameServer

@@ -6,6 +6,7 @@ var watchify    = require('watchify');
 var exorcist    = require('exorcist');
 var browserify  = require('browserify');
 var browserSync = require('browser-sync').create();
+var esdoc = require("gulp-esdoc");
 
 // Input file.
 watchify.args.debug = true;
@@ -41,6 +42,7 @@ function bundle() {
 gulp.task('bundle', function () {
     return bundle();
 });
+
 /**
  * Copy public resources
  */
@@ -53,6 +55,14 @@ gulp.task('copy', function() {
 
   gulp.src('src/*.html')
     .pipe(gulp.dest('dist'));
+});
+
+/**
+  * Generate Documentation
+  */
+gulp.task('docs', function(){
+  gulp.src("./src")
+    .pipe(esdoc({ destination: "./docs" }));
 });
 
 /**

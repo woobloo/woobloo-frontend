@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/core/GameServer.js | API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/woobloo/woobloo-frontend" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STAGE_HEIGHT">STAGE_HEIGHT</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STAGE_WIDTH">STAGE_WIDTH</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">Components</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Components/Tile.js~Tile.html">Tile</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html">GameServer</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">src/core/GameServer.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">&quot;use strict&quot;;
+import EventEmitter from &apos;wolfy87-eventemitter&apos;
+
+/**
+ * The GameServer Class is the primary way to communicate with a Game Server.
+ * It uses WebSockets to implement bi-directional communication.
+ * It extends EventEmitter which means you can subscribe to GameServer events.
+ * @extends EventEmitter
+ */
+class GameServer extends EventEmitter{
+  /**
+   * Creates a GameServer
+   *
+   * @param  {string} server - Hostname/IP (prepended with a &quot;ws://&quot;) of game
+   * server.
+   * @param {string} playerHash - Unique Hash that represents the player.
+   */
+  constructor(server, playerHash){
+    super()
+    this._server = server;
+    this._playerHash = playerHash;
+    this.connected = false;
+
+    this.Constants = {
+      GET_EVERYTHING : &quot;GET_EVERYTHING&quot;
+    }
+
+    this.Actions = {
+      getEverything: () =&gt; ({type: this.Constants.GET_EVERYTHING})
+    }
+  }
+
+  /**
+   * Connect to the Game Server
+   */
+  connect(){
+    this._ws = new WebSocket(this._server + &quot;/&quot; + this._playerHash)
+    this._ws.binaryType = &quot;arraybuffer&quot;;
+    this._ws.onopen = (event) =&gt; {
+      this.connected = true;
+      this.emitEvent(&quot;connect&quot;);
+    }
+
+    this._ws.onmessage = (message) =&gt; {
+      Promise.resolve(message)
+      .then(data =&gt; data.json())
+      .then(setup_data =&gt; this.emitEvent(&quot;setup_data&quot;, [setup_data])) // TODO: emit message action as event
+      .catch(err =&gt; this.emitEvent(&quot;error&quot;))
+    }
+
+    this._ws.onerror = () =&gt; {
+      this.emitEvent(&quot;error&quot;);
+    }
+
+    this._ws.onclose = () =&gt; {
+      this.connected = false;
+      this.emitEvent(&quot;disconnect&quot;)
+    }
+  }
+
+  /**
+   * Send a plain text message to the Game Server.
+   * You should almost certainly never have to use this publically.
+   *
+   * @param {string} message - Message to send.
+   */
+  send(message){
+    this._ws.send(message)
+  }
+
+  /**
+   * Generate protocol prefix from protocol Array.
+   *
+   * Convert array of ASCII indices to a string with the respective ASCII values.
+   *
+   * @param {Array} protocol - ASCII table indices.
+   * @return {string} the rotocol prefix string.
+   */
+  getProtocolString(protocol){
+    return protocol.reduce((string, int) =&gt; (string + String.fromCharCode(int)), &quot;&quot;)
+  }
+
+  /**
+   * Dispatch an action to the GameServer
+   *
+   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer&apos;s Action methods.
+   */
+  dispatch(action){
+    switch (action.type){
+      case this.Constants.GET_EVERYTHING:
+        this.send(this.getProtocolString[0, 0, 0, 1])
+      break;
+      default:
+      break;
+
+    }
+  }
+}
+
+export default GameServer
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

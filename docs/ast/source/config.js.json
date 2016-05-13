@@ -1,0 +1,281 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "STAGE_WIDTH",
+              "range": [
+                13,
+                24
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              }
+            },
+            "init": {
+              "type": "MemberExpression",
+              "computed": false,
+              "object": {
+                "type": "Identifier",
+                "name": "window",
+                "range": [
+                  27,
+                  33
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                }
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "innerWidth",
+                "range": [
+                  34,
+                  44
+                ],
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 34
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 44
+                  }
+                }
+              },
+              "range": [
+                27,
+                44
+              ],
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 44
+                }
+              }
+            },
+            "range": [
+              13,
+              44
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 44
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          7,
+          45
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 7
+          },
+          "end": {
+            "line": 1,
+            "column": 45
+          }
+        },
+        "leadingComments": [],
+        "trailingComments": []
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        0,
+        45
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 45
+        }
+      }
+    },
+    {
+      "type": "ExportNamedDeclaration",
+      "declaration": {
+        "type": "VariableDeclaration",
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "id": {
+              "type": "Identifier",
+              "name": "STAGE_HEIGHT",
+              "range": [
+                59,
+                71
+              ],
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 13
+                },
+                "end": {
+                  "line": 2,
+                  "column": 25
+                }
+              }
+            },
+            "init": {
+              "type": "MemberExpression",
+              "computed": false,
+              "object": {
+                "type": "Identifier",
+                "name": "window",
+                "range": [
+                  74,
+                  80
+                ],
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 34
+                  }
+                }
+              },
+              "property": {
+                "type": "Identifier",
+                "name": "innerHeight",
+                "range": [
+                  81,
+                  92
+                ],
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 35
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 46
+                  }
+                }
+              },
+              "range": [
+                74,
+                92
+              ],
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 28
+                },
+                "end": {
+                  "line": 2,
+                  "column": 46
+                }
+              }
+            },
+            "range": [
+              59,
+              92
+            ],
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 13
+              },
+              "end": {
+                "line": 2,
+                "column": 46
+              }
+            }
+          }
+        ],
+        "kind": "const",
+        "range": [
+          53,
+          93
+        ],
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 7
+          },
+          "end": {
+            "line": 2,
+            "column": 47
+          }
+        },
+        "leadingComments": [],
+        "trailingComments": []
+      },
+      "specifiers": [],
+      "source": null,
+      "range": [
+        46,
+        93
+      ],
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 47
+        }
+      }
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    0,
+    93
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 47
+    }
+  },
+  "comments": []
+}
