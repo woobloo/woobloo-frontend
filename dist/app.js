@@ -99203,11 +99203,6 @@ var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUT
 var Woobloo = function Woobloo(game) {};
 Woobloo.Boot = function (game) {};
 
-var TILE_SIDE = _Tile2.default.SIDE;
-var MAP_TILES = 50;
-var MAP_SIDE = TILE_SIDE * MAP_TILES;
-var WORLD_WIDTH = MAP_SIDE * 1.9;
-var WORLD_HEIGHT = MAP_SIDE;
 var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
 
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
@@ -99219,6 +99214,10 @@ Woobloo.Boot.prototype = {
 
         this._players = Players;
         this._map = Map;
+        this._map_tiles = this._map.length;
+        this._map_side = _Tile2.default.SIDE * this._map_tiles;
+        this._world_width = this._map_side * 1.9;
+        this._world_height = this._map_side;
     },
 
     getRandomInt: function getRandomInt(min, max) {
@@ -99255,9 +99254,9 @@ Woobloo.Boot.prototype = {
     },
     create: function create() {
 
-        game.world.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-        game.camera.x = WORLD_WIDTH / 2 - _config.STAGE_WIDTH / 2;
-        game.camera.y = WORLD_HEIGHT / 2 - _config.STAGE_HEIGHT / 2;
+        game.world.setBounds(0, 0, this._world_width, this._world_height);
+        game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
+        game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
 
         // Create a group for our tiles.
         isoGroup = game.add.group();
@@ -99339,8 +99338,8 @@ Woobloo.Boot.prototype = {
     },
     spawnTiles: function spawnTiles() {
         var tile;
-        for (var xx = 0; xx < this._map.length; xx++) {
-            for (var yy = 0; yy < this._map[0].length; yy++) {
+        for (var xx = 0; xx < this._map_tiles; xx++) {
+            for (var yy = 0; yy < this._map_tiles; yy++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
                 var tileData = this._map[xx][yy];

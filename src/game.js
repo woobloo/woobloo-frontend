@@ -6,11 +6,6 @@ var game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null,
 var Woobloo = function (game) { };
 Woobloo.Boot = function (game) { };
 
-const TILE_SIDE = Tile.SIDE;
-const MAP_TILES = 50;
-const MAP_SIDE = TILE_SIDE * MAP_TILES;
-const WORLD_WIDTH = MAP_SIDE*1.9;
-const WORLD_HEIGHT = MAP_SIDE;
 const TILES = [
   new Tile('grass', 'images/isometric/grass.png'),
   new Tile('rock', 'images/isometric/rock.png'),
@@ -23,6 +18,10 @@ Woobloo.Boot.prototype =
     init: function({Players, Map}){
       this._players = Players;
       this._map = Map;
+      this._map_tiles = this._map.length;
+      this._map_side = Tile.SIDE * this._map_tiles;
+      this._world_width = this._map_side * 1.9;
+      this._world_height = this._map_side;
     },
 
     getRandomInt: function(min, max) {
@@ -61,9 +60,9 @@ Woobloo.Boot.prototype =
     },
     create: function () {
 
-        game.world.setBounds(0, 0, WORLD_WIDTH, WORLD_HEIGHT);
-        game.camera.x = (WORLD_WIDTH)/2 - STAGE_WIDTH/2;
-        game.camera.y = (WORLD_HEIGHT)/2 - STAGE_HEIGHT/2;
+        game.world.setBounds(0, 0, this._world_width, this._world_height);
+        game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;
+        game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;
 
         // Create a group for our tiles.
         isoGroup = game.add.group();
@@ -153,8 +152,8 @@ Woobloo.Boot.prototype =
     },
     spawnTiles: function () {
         var tile;
-        for (var xx = 0; xx < this._map.length; xx ++) {
-            for (var yy = 0; yy < this._map[0].length; yy ++) {
+        for (var xx = 0; xx < this._map_tiles; xx ++) {
+            for (var yy = 0; yy < this._map_tiles; yy ++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
                 let tileData = this._map[xx][yy];
