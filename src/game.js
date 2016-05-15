@@ -7,8 +7,8 @@ var Woobloo = function (game) { };
 Woobloo.Boot = function (game) { };
 
 const TILES = [
-  new Tile('grass', 'images/isometric/grass.png'),
-  new Tile('rock', 'images/isometric/rock.png'),
+  "grass",
+  "rock"
 ]
 
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
@@ -31,7 +31,7 @@ Woobloo.Boot.prototype =
     preload: function () {
 
         for(let i in TILES){
-            game.load.image(TILES[i].name, TILES[i].imageFile);
+            game.load.image(TILES[i], `images/isomorphic/${TILES[i]}.png`);
         }
 
         game.load.image("tile_info_bg", "images/tile_info.png");

@@ -100426,11 +100426,10 @@ var Tile = function () {
     }
   }]);
 
-  function Tile(name, imageFile) {
+  function Tile(name) {
     _classCallCheck(this, Tile);
 
     this.name = name;
-    this.imageFile = imageFile;
   }
 
   return Tile;
@@ -100663,7 +100662,7 @@ var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUT
 var Woobloo = function Woobloo(game) {};
 Woobloo.Boot = function (game) {};
 
-var TILES = [new _Tile2.default('grass', 'images/isometric/grass.png'), new _Tile2.default('rock', 'images/isometric/rock.png')];
+var TILES = ["grass", "rock"];
 
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
@@ -100687,7 +100686,7 @@ Woobloo.Boot.prototype = {
     preload: function preload() {
 
         for (var i in TILES) {
-            game.load.image(TILES[i].name, TILES[i].imageFile);
+            game.load.image(TILES[i], 'images/isomorphic/' + TILES[i] + '.png');
         }
 
         game.load.image("tile_info_bg", "images/tile_info.png");
