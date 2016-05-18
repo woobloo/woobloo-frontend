@@ -390,6 +390,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/components/map.js~map#update",
+    "class/src/Components/Map.js~Map.html#instance-method-update",
+    "src/Components/Map.js~Map#update",
+    "method"
+  ],
+  [
     "src/components/map.js~map#width",
     "class/src/Components/Map.js~Map.html#instance-member-width",
     "src/Components/Map.js~Map#width",

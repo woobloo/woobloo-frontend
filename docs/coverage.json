@@ -1,7 +1,7 @@
 {
-  "coverage": "47.82%",
-  "expectCount": 23,
-  "actualCount": 11,
+  "coverage": "50%",
+  "expectCount": 24,
+  "actualCount": 12,
   "files": {
     "src/core/GameServer.js": {
       "expectCount": 9,
@@ -13,8 +13,8 @@
       ]
     },
     "src/Components/Map.js": {
-      "expectCount": 7,
-      "actualCount": 5,
+      "expectCount": 8,
+      "actualCount": 6,
       "undocumentLines": [
         15,
         16

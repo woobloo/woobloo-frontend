@@ -7,7 +7,7 @@ var game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null,
 var Woobloo = function (game) { };
 Woobloo.Boot = function (game) { };
 
-var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
+var cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 Woobloo.Boot.prototype =
 {
@@ -70,42 +70,8 @@ Woobloo.Boot.prototype =
     },
     update: function () {
         // Update the cursor position.
-        // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily
-        // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.
         game.iso.unproject(game.input.activePointer.position, cursorPos);
-
-        // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
-        this._map._isoGroup.forEach(function (tile) {
-            var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
-            // If it does, do a little animation and tint change.
-            if (!tile.selected && inBounds) {
-                tile.selected = true;
-                tile.tint = 0x86bfda;
-                // console.log(tile);
-
-                tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
-                tile.infoPanel.anchor = new Phaser.Point(0, 1);
-                tile.infoPanel.visible = false
-                setTimeout(() => {
-                  // tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
-                  if(tile.selected)
-                    tile.infoPanel.visible = true
-                }, 1000);
-                // game.add.image();
-
-                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
-            }
-            // If not, revert back to how it was.
-            else if (tile.selected && !inBounds) {
-                tile.selected = false;
-                tile.tint = 0xffffff;
-
-                if(tile.infoPanel)
-                  tile.infoPanel.kill()
-
-                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
-            }
-        });
+        this._map.update(game, cursorPos)
 
         if (arrowKeys.up.isDown)
          {
@@ -139,7 +105,7 @@ Woobloo.Boot.prototype =
     },
     render: function () {
         game.debug.text(`FPS: ${game.time.fps}` || '--', 4, 20, "#bbb");
-        game.debug.cameraInfo(game.camera, 32, 32);
+        // game.debug.cameraInfo(game.camera, 32, 32);
     }
 };
 

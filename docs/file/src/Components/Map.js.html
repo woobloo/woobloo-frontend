@@ -92,6 +92,46 @@ class Map {
       }
 
     /**
+      * Update the Map
+      * @param {Phaser.Game} game - The Phaser game instance
+      * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position
+      */
+    update(game, cursorPos){
+      // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
+      this._isoGroup.forEach(function (tile) {
+          var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
+          // If it does, do a little animation and tint change.
+          if (!tile.selected &amp;&amp; inBounds) {
+              tile.selected = true;
+              tile.tint = 0x86bfda;
+              // console.log(tile);
+
+              tile.infoPanel = game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;)
+              tile.infoPanel.anchor = new Phaser.Point(0, 1);
+              tile.infoPanel.visible = false
+              setTimeout(() =&gt; {
+                // tile.infoPanel = game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;)
+                if(tile.selected)
+                  tile.infoPanel.visible = true
+              }, 1000);
+              // game.add.image();
+
+              // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
+          }
+          // If not, revert back to how it was.
+          else if (tile.selected &amp;&amp; !inBounds) {
+              tile.selected = false;
+              tile.tint = 0xffffff;
+
+              if(tile.infoPanel)
+                tile.infoPanel.kill()
+
+              // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
+          }
+      });
+    }
+
+    /**
       * Create a new test map object of only grass tiles.
       *
       * return {Map} the grass map.
