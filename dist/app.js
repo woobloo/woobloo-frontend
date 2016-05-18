@@ -100448,6 +100448,7 @@ var Map = function () {
 
   /**
     * Preload all the resources used by a Map object
+    * @param {Phaser.Game} game - The Phaser game instance
     */
 
 
@@ -100456,6 +100457,28 @@ var Map = function () {
     value: function preload(game) {
       for (var i in this._tileset) {
         game.load.image(this._tileset[i], "images/isometric/" + this._tileset[i] + ".png");
+      }
+    }
+
+    /**
+      * Render the Map.
+      * @param {Phaser.Game} game - The Phaser game instance
+      */
+
+  }, {
+    key: "render",
+    value: function render(game) {
+      // Create a group for our tiles.
+      this._isoGroup = game.add.group();
+
+      for (var xx = 0; xx < this.height; xx++) {
+        for (var yy = 0; yy < this.width; yy++) {
+          // Create a tile using the new game.add.isoSprite factory method at the specified position.
+          // The last parameter is the group you want to add it to (just like game.add.sprite)
+          var tileData = this._map[xx][yy];
+          var tile = game.add.isoSprite(tileData.pos.x * _Tile2.default.SIDE, tileData.pos.y * _Tile2.default.SIDE, 0, "grass", 0, this._isoGroup);
+          tile.anchor.set(0.5, 0);
+        }
       }
     }
 
@@ -100806,11 +100829,7 @@ Woobloo.Boot.prototype = {
         game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
         game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
 
-        // Create a group for our tiles.
-        isoGroup = game.add.group();
-
-        // Let's make a load of tiles on a grid.
-        this.spawnTiles();
+        this._map.render(game);
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
@@ -100826,7 +100845,7 @@ Woobloo.Boot.prototype = {
         game.iso.unproject(game.input.activePointer.position, cursorPos);
 
         // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
-        isoGroup.forEach(function (tile) {
+        this._map._isoGroup.forEach(function (tile) {
             var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
             // If it does, do a little animation and tint change.
             if (!tile.selected && inBounds) {
@@ -100883,18 +100902,6 @@ Woobloo.Boot.prototype = {
     render: function render() {
         game.debug.text('FPS: ' + game.time.fps || '--', 4, 20, "#bbb");
         game.debug.cameraInfo(game.camera, 32, 32);
-    },
-    spawnTiles: function spawnTiles() {
-        var tile;
-        for (var xx = 0; xx < this._map.height; xx++) {
-            for (var yy = 0; yy < this._map.width; yy++) {
-                // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                // The last parameter is the group you want to add it to (just like game.add.sprite)
-                var tileData = this._map._map[xx][yy];
-                tile = game.add.isoSprite(tileData.pos.x * _Tile2.default.SIDE, tileData.pos.y * _Tile2.default.SIDE, 0, "grass", 0, isoGroup);
-                tile.anchor.set(0.5, 0);
-            }
-        }
     }
 };
 

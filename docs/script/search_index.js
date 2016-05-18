@@ -384,6 +384,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/components/map.js~map#render",
+    "class/src/Components/Map.js~Map.html#instance-method-render",
+    "src/Components/Map.js~Map#render",
+    "method"
+  ],
+  [
     "src/components/map.js~map#width",
     "class/src/Components/Map.js~Map.html#instance-member-width",
     "src/Components/Map.js~Map#width",

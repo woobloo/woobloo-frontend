@@ -103,11 +103,7 @@ Woobloo.Boot.prototype =
         game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;
         game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;
 
-        // Create a group for our tiles.
-        isoGroup = game.add.group();
-
-        // Let&apos;s make a load of tiles on a grid.
-        this.spawnTiles();
+        this._map.render(game);
 
         // Provide a 3D position for the cursor
         cursorPos = new Phaser.Plugin.Isometric.Point3();
@@ -123,7 +119,7 @@ Woobloo.Boot.prototype =
         game.iso.unproject(game.input.activePointer.position, cursorPos);
 
         // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
-        isoGroup.forEach(function (tile) {
+        this._map._isoGroup.forEach(function (tile) {
             var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
             // If it does, do a little animation and tint change.
             if (!tile.selected &amp;&amp; inBounds) {
@@ -188,18 +184,6 @@ Woobloo.Boot.prototype =
     render: function () {
         game.debug.text(`FPS: ${game.time.fps}` || &apos;--&apos;, 4, 20, &quot;#bbb&quot;);
         game.debug.cameraInfo(game.camera, 32, 32);
-    },
-    spawnTiles: function () {
-        var tile;
-        for (var xx = 0; xx &lt; this._map.height; xx ++) {
-            for (var yy = 0; yy &lt; this._map.width; yy ++) {
-                // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                // The last parameter is the group you want to add it to (just like game.add.sprite)
-                let tileData = this._map._map[xx][yy];
-                tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, &quot;grass&quot;, 0, isoGroup);
-                tile.anchor.set(0.5, 0);
-            }
-        }
     }
 };
 
