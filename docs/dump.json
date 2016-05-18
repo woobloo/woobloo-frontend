@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import Tile from './Tile'\n\n/**\n  * A class that represents a Map, and includes helper functions\n  * including a render method.\n  */\nclass Map {\n\n    /**\n      * Create a new map object using JSON data that represents a map.\n      * Usually in the same format as GameServer provided data.\n      */\n    constructor(mapData){\n      this._map = mapData;\n      this.height = mapData.length;\n      this.width = mapData[0].length;\n\n      this._tileset = [\"grass\",\"rock\"]\n    }\n\n    /**\n      * Preload all the resources used by a Map object\n      * @param {Phaser.Game} game - The Phaser game instance\n      */\n      preload(game){\n        for(let i in this._tileset){\n            game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);\n        }\n      }\n\n    /**\n      * Render the Map.\n      * @param {Phaser.Game} game - The Phaser game instance\n      */\n      render(game){\n        // Create a group for our tiles.\n        this._isoGroup = game.add.group();\n\n        for (var xx = 0; xx < this.height; xx ++) {\n            for (var yy = 0; yy < this.width; yy ++) {\n                // Create a tile using the new game.add.isoSprite factory method at the specified position.\n                // The last parameter is the group you want to add it to (just like game.add.sprite)\n                let tileData = this._map[xx][yy];\n                let tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, \"grass\", 0, this._isoGroup);\n                tile.anchor.set(0.5, 0);\n            }\n        }\n      }\n\n    /**\n      * Update the Map\n      * @param {Phaser.Game} game - The Phaser game instance\n      * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position\n      */\n    update(game, cursorPos){\n      // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.\n      this._isoGroup.forEach(function (tile) {\n          var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);\n          // If it does, do a little animation and tint change.\n          if (!tile.selected && inBounds) {\n              tile.selected = true;\n              tile.tint = 0x86bfda;\n              // console.log(tile);\n\n              tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n              tile.infoPanel.anchor = new Phaser.Point(0, 1);\n              tile.infoPanel.visible = false\n              setTimeout(() => {\n                // tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                if(tile.selected)\n                  tile.infoPanel.visible = true\n              }, 1000);\n              // game.add.image();\n\n              // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);\n          }\n          // If not, revert back to how it was.\n          else if (tile.selected && !inBounds) {\n              tile.selected = false;\n              tile.tint = 0xffffff;\n\n              if(tile.infoPanel)\n                tile.infoPanel.kill()\n\n              // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);\n          }\n      });\n    }\n\n    /**\n      * Create a new test map object of only grass tiles.\n      *\n      * return {Map} the grass map.\n      */\n    static createGrassMap(){\n      let map = [];\n\n      for(var i = 0; i < 50; i++){\n        map[i] = [];\n          for(var j = 0; j < 50; j++){\n            map[i][j] = new Tile(\n              {\n                type: \"grass\",\n                pos: { x: i,y: j }\n              }\n            );\n          }\n      }\n\n      return new Map(map);\n    }\n}\n\nexport default Map\n"
+    "content": "import Tile from './Tile'\n\n/**\n  * A class that represents a Map and includes helper functions\n  * and a render and update method.\n  */\nclass Map {\n\n    /**\n      * Create a new map object using JSON data that represents a map.\n      * Usually in the same format as GameServer provided data.\n      * @param {Object} mapData - The Map data (from a server for instance)\n      */\n    constructor(mapData){\n      this._map = mapData;\n\n      /**\n        * The map's height in units (tiles)\n        * @type {Number}\n        */\n      this.height = mapData.length;\n\n      /**\n        * The map's width in units (tiles)\n        * @type {Number}\n        */\n      this.width = mapData[0].length;\n\n      this._tileset = [\"grass\",\"rock\"]\n    }\n\n    /**\n      * Preload all the resources used by a Map object\n      * @param {Phaser.Game} game - The Phaser game instance\n      */\n      preload(game){\n        for(let i in this._tileset){\n            game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);\n        }\n      }\n\n    /**\n      * Render the Map.\n      * @param {Phaser.Game} game - The Phaser game instance\n      */\n      render(game){\n        // Create a group for our tiles.\n        this._isoGroup = game.add.group();\n\n        for (var xx = 0; xx < this.height; xx ++) {\n            for (var yy = 0; yy < this.width; yy ++) {\n                // Create a tile using the new game.add.isoSprite factory method at the specified position.\n                // The last parameter is the group you want to add it to (just like game.add.sprite)\n                let tileData = this._map[xx][yy];\n                let tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, \"grass\", 0, this._isoGroup);\n                tile.anchor.set(0.5, 0);\n            }\n        }\n      }\n\n    /**\n      * Update the Map\n      * @param {Phaser.Game} game - The Phaser game instance\n      * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position\n      */\n    update(game, cursorPos){\n      // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.\n      this._isoGroup.forEach(function (tile) {\n          var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);\n          // If it does, do a little animation and tint change.\n          if (!tile.selected && inBounds) {\n              tile.selected = true;\n              tile.tint = 0x86bfda;\n              // console.log(tile);\n\n              tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n              tile.infoPanel.anchor = new Phaser.Point(0, 1);\n              tile.infoPanel.visible = false\n              setTimeout(() => {\n                // tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                if(tile.selected)\n                  tile.infoPanel.visible = true\n              }, 1000);\n              // game.add.image();\n\n              // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);\n          }\n          // If not, revert back to how it was.\n          else if (tile.selected && !inBounds) {\n              tile.selected = false;\n              tile.tint = 0xffffff;\n\n              if(tile.infoPanel)\n                tile.infoPanel.kill()\n\n              // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);\n          }\n      });\n    }\n\n    /**\n      * Create a new test map object of only grass tiles.\n      *\n      * @return {Map} the grass map.\n      */\n    static createGrassMap(){\n      let map = [];\n\n      for(var i = 0; i < 50; i++){\n        map[i] = [];\n          for(var j = 0; j < 50; j++){\n            map[i][j] = new Tile(\n              {\n                type: \"grass\",\n                pos: { x: i,y: j }\n              }\n            );\n          }\n      }\n\n      return new Map(map);\n    }\n}\n\nexport default Map\n"
   },
   {
     "__docId__": 1,
@@ -24,7 +24,7 @@
     "export": true,
     "importPath": "woobloo-frontend/src/Components/Map.js",
     "importStyle": "Map",
-    "description": "A class that represents a Map, and includes helper functions\nincluding a render method.",
+    "description": "A class that represents a Map and includes helper functions\nand a render and update method.",
     "lineNumber": 7,
     "interface": false
   },
@@ -38,13 +38,17 @@
     "longname": "src/Components/Map.js~Map#constructor",
     "access": null,
     "description": "Create a new map object using JSON data that represents a map.\nUsually in the same format as GameServer provided data.",
-    "lineNumber": 13,
+    "lineNumber": 14,
     "params": [
       {
-        "name": "mapData",
+        "nullable": null,
         "types": [
-          "*"
-        ]
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "mapData",
+        "description": "The Map data (from a server for instance)"
       }
     ],
     "generator": false
@@ -59,7 +63,7 @@
     "longname": "src/Components/Map.js~Map#_map",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 15,
     "undocument": true,
     "type": {
       "types": [
@@ -76,13 +80,15 @@
     "memberof": "src/Components/Map.js~Map",
     "longname": "src/Components/Map.js~Map#height",
     "access": null,
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true,
+    "description": "The map's height in units (tiles)",
+    "lineNumber": 21,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -94,13 +100,15 @@
     "memberof": "src/Components/Map.js~Map",
     "longname": "src/Components/Map.js~Map#width",
     "access": null,
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
+    "description": "The map's width in units (tiles)",
+    "lineNumber": 27,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -113,7 +121,7 @@
     "longname": "src/Components/Map.js~Map#_tileset",
     "access": null,
     "description": null,
-    "lineNumber": 18,
+    "lineNumber": 29,
     "undocument": true,
     "type": {
       "types": [
@@ -131,7 +139,7 @@
     "longname": "src/Components/Map.js~Map#preload",
     "access": null,
     "description": "Preload all the resources used by a Map object",
-    "lineNumber": 25,
+    "lineNumber": 36,
     "params": [
       {
         "nullable": null,
@@ -156,7 +164,7 @@
     "longname": "src/Components/Map.js~Map#render",
     "access": null,
     "description": "Render the Map.",
-    "lineNumber": 35,
+    "lineNumber": 46,
     "params": [
       {
         "nullable": null,
@@ -181,7 +189,7 @@
     "longname": "src/Components/Map.js~Map#_isoGroup",
     "access": null,
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 48,
     "undocument": true,
     "type": {
       "types": [
@@ -199,7 +207,7 @@
     "longname": "src/Components/Map.js~Map#update",
     "access": null,
     "description": "Update the Map",
-    "lineNumber": 55,
+    "lineNumber": 66,
     "params": [
       {
         "nullable": null,
@@ -233,13 +241,16 @@
     "memberof": "src/Components/Map.js~Map",
     "longname": "src/Components/Map.js~Map.createGrassMap",
     "access": null,
-    "description": "Create a new test map object of only grass tiles.\n\nreturn {Map} the grass map.",
-    "lineNumber": 95,
+    "description": "Create a new test map object of only grass tiles.",
+    "lineNumber": 106,
     "params": [],
     "return": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Map"
+      ],
+      "spread": false,
+      "description": "the grass map."
     },
     "generator": false
   },
@@ -253,8 +264,8 @@
     "longname": "src/Components/Tile.js",
     "access": null,
     "description": null,
-    "lineNumber": 1,
-    "content": "export default class Tile {\n  static get SIDE() { return 64 }\n\n  constructor({ type = \"grass\", pos }){\n    this.type = type\n    this.pos = pos\n  }\n\n}\n"
+    "lineNumber": 5,
+    "content": "/**\n  * A class that represents a Tile and includes helper functions\n  * and a render and update method.\n  */\nexport default class Tile {\n\n  /**\n    * The side of a tile in pixels\n    * @type {Number}\n    */\n  static get SIDE() { return 64 }\n\n  /**\n    * Make a new tile\n    * @param {Object} props - Tile properties\n    * @param {String} [props.type=\"grass\"] - Type of tile\n    * @param {Object} props.pos - position of tile\n    * @param {Number} props.pos.x - X offset in units (tiles)\n    * @param {Number} props.pos.y - Y offset in units (tiles)\n    */\n  constructor({ type = \"grass\", pos }){\n\n    /**\n      * Type of tile.\n      *\n      * This is also used as the name of the image file to use.\n      * @type {String}\n      */\n    this.type = type\n\n    /**\n      * Position of tile.\n      *\n      * @type {Object}\n      * @property {Number} pos.x - The X coordinate\n      * @property {Number} pos.y - The Y coordinate\n      */\n    this.pos = pos\n  }\n\n}\n"
   },
   {
     "__docId__": 13,
@@ -268,9 +279,8 @@
     "export": true,
     "importPath": "woobloo-frontend/src/Components/Tile.js",
     "importStyle": "Tile",
-    "description": null,
-    "lineNumber": 1,
-    "undocument": true,
+    "description": "A class that represents a Tile and includes helper functions\nand a render and update method.",
+    "lineNumber": 5,
     "interface": false
   },
   {
@@ -282,13 +292,15 @@
     "memberof": "src/Components/Tile.js~Tile",
     "longname": "src/Components/Tile.js~Tile.SIDE",
     "access": null,
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true,
+    "description": "The side of a tile in pixels",
+    "lineNumber": 11,
     "type": {
+      "nullable": null,
       "types": [
-        "number"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     },
     "generator": false
   },
@@ -301,20 +313,60 @@
     "memberof": "src/Components/Tile.js~Tile",
     "longname": "src/Components/Tile.js~Tile#constructor",
     "access": null,
-    "description": null,
-    "lineNumber": 4,
-    "undocument": true,
+    "description": "Make a new tile",
+    "lineNumber": 21,
     "params": [
       {
-        "name": "objectPattern",
+        "nullable": null,
         "types": [
-          "{\"type\": *, \"pos\": *}"
+          "Object"
         ],
-        "defaultRaw": {
-          "type": null,
-          "pos": null
-        },
-        "defaultValue": "{\"type\":null,\"pos\":null}"
+        "spread": false,
+        "optional": false,
+        "name": "props",
+        "description": "Tile properties"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "\"grass\"",
+        "defaultRaw": "grass",
+        "name": "props.type",
+        "description": "Type of tile"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "props.pos",
+        "description": "position of tile"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "props.pos.x",
+        "description": "X offset in units (tiles)"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "props.pos.y",
+        "description": "Y offset in units (tiles)"
       }
     ],
     "generator": false
@@ -328,13 +380,15 @@
     "memberof": "src/Components/Tile.js~Tile",
     "longname": "src/Components/Tile.js~Tile#type",
     "access": null,
-    "description": null,
-    "lineNumber": 5,
-    "undocument": true,
+    "description": "Type of tile.\n\nThis is also used as the name of the image file to use.",
+    "lineNumber": 29,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "String"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -346,13 +400,37 @@
     "memberof": "src/Components/Tile.js~Tile",
     "longname": "src/Components/Tile.js~Tile#pos",
     "access": null,
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
+    "description": "Position of tile.",
+    "lineNumber": 38,
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pos.x",
+        "description": "The X coordinate"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "pos.y",
+        "description": "The Y coordinate"
+      }
+    ],
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Object"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {

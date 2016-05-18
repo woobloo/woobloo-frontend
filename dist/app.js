@@ -100425,8 +100425,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
-  * A class that represents a Map, and includes helper functions
-  * including a render method.
+  * A class that represents a Map and includes helper functions
+  * and a render and update method.
   */
 
 var Map = function () {
@@ -100434,13 +100434,24 @@ var Map = function () {
   /**
     * Create a new map object using JSON data that represents a map.
     * Usually in the same format as GameServer provided data.
+    * @param {Object} mapData - The Map data (from a server for instance)
     */
 
   function Map(mapData) {
     _classCallCheck(this, Map);
 
     this._map = mapData;
+
+    /**
+      * The map's height in units (tiles)
+      * @type {Number}
+      */
     this.height = mapData.length;
+
+    /**
+      * The map's width in units (tiles)
+      * @type {Number}
+      */
     this.width = mapData[0].length;
 
     this._tileset = ["grass", "rock"];
@@ -100526,7 +100537,7 @@ var Map = function () {
     /**
       * Create a new test map object of only grass tiles.
       *
-      * return {Map} the grass map.
+      * @return {Map} the grass map.
       */
 
   }], [{
@@ -100564,12 +100575,33 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+  * A class that represents a Tile and includes helper functions
+  * and a render and update method.
+  */
+
 var Tile = function () {
   _createClass(Tile, null, [{
     key: "SIDE",
+
+
+    /**
+      * The side of a tile in pixels
+      * @type {Number}
+      */
     get: function get() {
       return 64;
     }
+
+    /**
+      * Make a new tile
+      * @param {Object} props - Tile properties
+      * @param {String} [props.type="grass"] - Type of tile
+      * @param {Object} props.pos - position of tile
+      * @param {Number} props.pos.x - X offset in units (tiles)
+      * @param {Number} props.pos.y - Y offset in units (tiles)
+      */
+
   }]);
 
   function Tile(_ref) {
@@ -100579,7 +100611,21 @@ var Tile = function () {
 
     _classCallCheck(this, Tile);
 
+    /**
+      * Type of tile.
+      *
+      * This is also used as the name of the image file to use.
+      * @type {String}
+      */
     this.type = type;
+
+    /**
+      * Position of tile.
+      *
+      * @type {Object}
+      * @property {Number} pos.x - The X coordinate
+      * @property {Number} pos.y - The Y coordinate
+      */
     this.pos = pos;
   }
 

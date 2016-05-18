@@ -1,18 +1,29 @@
 import Tile from './Tile'
 
 /**
-  * A class that represents a Map, and includes helper functions
-  * including a render method.
+  * A class that represents a Map and includes helper functions
+  * and a render and update method.
   */
 class Map {
 
     /**
       * Create a new map object using JSON data that represents a map.
       * Usually in the same format as GameServer provided data.
+      * @param {Object} mapData - The Map data (from a server for instance)
       */
     constructor(mapData){
       this._map = mapData;
+
+      /**
+        * The map's height in units (tiles)
+        * @type {Number}
+        */
       this.height = mapData.length;
+
+      /**
+        * The map's width in units (tiles)
+        * @type {Number}
+        */
       this.width = mapData[0].length;
 
       this._tileset = ["grass","rock"]
@@ -90,7 +101,7 @@ class Map {
     /**
       * Create a new test map object of only grass tiles.
       *
-      * return {Map} the grass map.
+      * @return {Map} the grass map.
       */
     static createGrassMap(){
       let map = [];
