@@ -6,6 +6,12 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "woobloo-frontend/src/components/map.js~map",
+    "class/src/Components/Map.js~Map.html",
+    "<span>Map</span> <span class=\"search-result-import-path\">woobloo-frontend/src/Components/Map.js</span>",
+    "class"
+  ],
+  [
     "woobloo-frontend/src/config.js~stage_height",
     "variable/index.html#static-variable-STAGE_HEIGHT",
     "<span>STAGE_HEIGHT</span> <span class=\"search-result-import-path\">woobloo-frontend/src/config.js</span>",
@@ -354,6 +360,42 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "src/components/map.js",
+    "file/src/Components/Map.js.html",
+    "src/Components/Map.js",
+    "file"
+  ],
+  [
+    "src/components/map.js~map#constructor",
+    "class/src/Components/Map.js~Map.html#instance-constructor-constructor",
+    "src/Components/Map.js~Map#constructor",
+    "method"
+  ],
+  [
+    "src/components/map.js~map#height",
+    "class/src/Components/Map.js~Map.html#instance-member-height",
+    "src/Components/Map.js~Map#height",
+    "member"
+  ],
+  [
+    "src/components/map.js~map#preload",
+    "class/src/Components/Map.js~Map.html#instance-method-preload",
+    "src/Components/Map.js~Map#preload",
+    "method"
+  ],
+  [
+    "src/components/map.js~map#width",
+    "class/src/Components/Map.js~Map.html#instance-member-width",
+    "src/Components/Map.js~Map#width",
+    "member"
+  ],
+  [
+    "src/components/map.js~map.creategrassmap",
+    "class/src/Components/Map.js~Map.html#static-method-createGrassMap",
+    "src/Components/Map.js~Map.createGrassMap",
+    "method"
+  ],
+  [
     "src/components/tile.js",
     "file/src/Components/Tile.js.html",
     "src/Components/Tile.js",
@@ -366,15 +408,15 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
-    "src/components/tile.js~tile#imagefile",
-    "class/src/Components/Tile.js~Tile.html#instance-member-imageFile",
-    "src/Components/Tile.js~Tile#imageFile",
+    "src/components/tile.js~tile#pos",
+    "class/src/Components/Tile.js~Tile.html#instance-member-pos",
+    "src/Components/Tile.js~Tile#pos",
     "member"
   ],
   [
-    "src/components/tile.js~tile#name",
-    "class/src/Components/Tile.js~Tile.html#instance-member-name",
-    "src/Components/Tile.js~Tile#name",
+    "src/components/tile.js~tile#type",
+    "class/src/Components/Tile.js~Tile.html#instance-member-type",
+    "src/Components/Tile.js~Tile#type",
     "member"
   ],
   [

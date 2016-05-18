@@ -4,16 +4,178 @@
     "kind": "file",
     "static": true,
     "variation": null,
+    "name": "src/Components/Map.js",
+    "memberof": null,
+    "longname": "src/Components/Map.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import Tile from './Tile'\n\n/**\n  * A class that represents a Map, and includes helper functions\n  * including a render method.\n  */\nclass Map {\n\n    /**\n      * Create a new map object using JSON data that represents a map.\n      * Usually in the same format as GameServer provided data.\n      */\n    constructor(mapData){\n      this._map = mapData;\n      this.height = mapData.length;\n      this.width = mapData[0].length;\n\n      this._tileset = [\"grass\",\"rock\"]\n    }\n\n    /**\n      * Preload all the resources used by a Map object\n      */\n      preload(game){\n        for(let i in this._tileset){\n            game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);\n        }\n      }\n\n    /**\n      * Create a new test map object of only grass tiles.\n      *\n      * return {Map} the grass map.\n      */\n    static createGrassMap(){\n      let map = [];\n\n      for(var i = 0; i < 50; i++){\n        map[i] = [];\n          for(var j = 0; j < 50; j++){\n            map[i][j] = new Tile(\n              {\n                type: \"grass\",\n                pos: { x: i,y: j }\n              }\n            );\n          }\n      }\n\n      return new Map(map);\n    }\n}\n\nexport default Map\n"
+  },
+  {
+    "__docId__": 1,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "memberof": "src/Components/Map.js",
+    "longname": "src/Components/Map.js~Map",
+    "access": null,
+    "export": true,
+    "importPath": "woobloo-frontend/src/Components/Map.js",
+    "importStyle": "Map",
+    "description": "A class that represents a Map, and includes helper functions\nincluding a render method.",
+    "lineNumber": 7,
+    "interface": false
+  },
+  {
+    "__docId__": 2,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#constructor",
+    "access": null,
+    "description": "Create a new map object using JSON data that represents a map.\nUsually in the same format as GameServer provided data.",
+    "lineNumber": 13,
+    "params": [
+      {
+        "name": "mapData",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 3,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_map",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#_map",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "height",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#height",
+    "access": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "width",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#width",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_tileset",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#_tileset",
+    "access": null,
+    "description": null,
+    "lineNumber": 18,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 7,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "preload",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map#preload",
+    "access": null,
+    "description": "Preload all the resources used by a Map object",
+    "lineNumber": 24,
+    "params": [
+      {
+        "name": "game",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 8,
+    "kind": "method",
+    "static": true,
+    "variation": null,
+    "name": "createGrassMap",
+    "memberof": "src/Components/Map.js~Map",
+    "longname": "src/Components/Map.js~Map.createGrassMap",
+    "access": null,
+    "description": "Create a new test map object of only grass tiles.\n\nreturn {Map} the grass map.",
+    "lineNumber": 35,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 9,
+    "kind": "file",
+    "static": true,
+    "variation": null,
     "name": "src/Components/Tile.js",
     "memberof": null,
     "longname": "src/Components/Tile.js",
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "export default class Tile {\n  static get SIDE() { return 64 }\n\n  constructor(name, imageFile){\n    this.name = name\n    this.imageFile = imageFile\n  }\n\n}\n"
+    "content": "export default class Tile {\n  static get SIDE() { return 64 }\n\n  constructor({ type = \"grass\", pos }){\n    this.type = type\n    this.pos = pos\n  }\n\n}\n"
   },
   {
-    "__docId__": 1,
+    "__docId__": 10,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -30,7 +192,7 @@
     "interface": false
   },
   {
-    "__docId__": 2,
+    "__docId__": 11,
     "kind": "get",
     "static": true,
     "variation": null,
@@ -49,7 +211,7 @@
     "generator": false
   },
   {
-    "__docId__": 3,
+    "__docId__": 12,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -62,28 +224,27 @@
     "undocument": true,
     "params": [
       {
-        "name": "name",
+        "name": "objectPattern",
         "types": [
-          "*"
-        ]
-      },
-      {
-        "name": "imageFile",
-        "types": [
-          "*"
-        ]
+          "{\"type\": *, \"pos\": *}"
+        ],
+        "defaultRaw": {
+          "type": null,
+          "pos": null
+        },
+        "defaultValue": "{\"type\":null,\"pos\":null}"
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 4,
+    "__docId__": 13,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "name",
+    "name": "type",
     "memberof": "src/Components/Tile.js~Tile",
-    "longname": "src/Components/Tile.js~Tile#name",
+    "longname": "src/Components/Tile.js~Tile#type",
     "access": null,
     "description": null,
     "lineNumber": 5,
@@ -95,13 +256,13 @@
     }
   },
   {
-    "__docId__": 5,
+    "__docId__": 14,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "imageFile",
+    "name": "pos",
     "memberof": "src/Components/Tile.js~Tile",
-    "longname": "src/Components/Tile.js~Tile#imageFile",
+    "longname": "src/Components/Tile.js~Tile#pos",
     "access": null,
     "description": null,
     "lineNumber": 6,
@@ -113,7 +274,7 @@
     }
   },
   {
-    "__docId__": 6,
+    "__docId__": 15,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -123,10 +284,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import SetupPhaser from './core/SetupPhaser.js'\nimport Game from './game.js'\nimport GameServer from './core/GameServer.js'\n\nconst gs = new GameServer('ws://159.203.237.59:8080', \"123e4567-e89b-12d3-a456-426655440000\");\ngs.connect();\n\ngs.on('connected', () => {\n  gs.dispatch(gs.Actions.getEverything());\n})\n\ngs.on('error', () => {\n  console.error(\"There was an error connecting to the server\");\n})\n\ngs.on('disconnect', () => {\n  console.log(\"Server Disconnected\");\n})\n\ngs.on('setup_data', setup_data => {\n  Game.state.start('Boot', true, false, setup_data);\n});\n"
+    "content": "import SetupPhaser from './core/SetupPhaser.js'\nimport Game from './game.js'\nimport GameServer from './core/GameServer.js'\n\nconst gs = new GameServer('ws://159.203.237.59:8080', \"123e4567-e89b-12d3-a456-426655440000\");\n// gs.connect();\n\ngs.on('connected', () => {\n  gs.dispatch(gs.Actions.getEverything());\n})\n\ngs.on('error', () => {\n  console.error(\"There was an error connecting to the server\");\n})\n\ngs.on('disconnect', () => {\n  console.log(\"Server Disconnected\");\n})\n\n// gs.on('setup_data', setup_data => {\n  Game.state.start('Boot', true, false);\n// });\n"
   },
   {
-    "__docId__": 7,
+    "__docId__": 16,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -147,7 +308,7 @@
     }
   },
   {
-    "__docId__": 8,
+    "__docId__": 17,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -160,7 +321,7 @@
     "content": "export const STAGE_WIDTH = window.innerWidth;\nexport const STAGE_HEIGHT = window.innerHeight;\n"
   },
   {
-    "__docId__": 9,
+    "__docId__": 18,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -181,7 +342,7 @@
     }
   },
   {
-    "__docId__": 10,
+    "__docId__": 19,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -202,7 +363,7 @@
     }
   },
   {
-    "__docId__": 11,
+    "__docId__": 20,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -215,7 +376,7 @@
     "content": "\"use strict\";\nimport EventEmitter from 'wolfy87-eventemitter'\n\n/**\n * The GameServer Class is the primary way to communicate with a Game Server.\n * It uses WebSockets to implement bi-directional communication.\n * It extends EventEmitter which means you can subscribe to GameServer events.\n * @extends EventEmitter\n */\nclass GameServer extends EventEmitter{\n  /**\n   * Creates a GameServer\n   *\n   * @param  {string} server - Hostname/IP (prepended with a \"ws://\") of game\n   * server.\n   * @param {string} playerHash - Unique Hash that represents the player.\n   */\n  constructor(server, playerHash){\n    super()\n    this._server = server;\n    this._playerHash = playerHash;\n    this.connected = false;\n\n    this.Constants = {\n      GET_EVERYTHING : \"GET_EVERYTHING\"\n    }\n\n    this.Actions = {\n      getEverything: () => ({type: this.Constants.GET_EVERYTHING})\n    }\n  }\n\n  /**\n   * Connect to the Game Server\n   */\n  connect(){\n    this._ws = new WebSocket(this._server + \"/\" + this._playerHash)\n    this._ws.binaryType = \"arraybuffer\";\n    this._ws.onopen = (event) => {\n      this.connected = true;\n      this.emitEvent(\"connect\");\n    }\n\n    this._ws.onmessage = (message) => {\n      Promise.resolve(message)\n      .then(data => data.json())\n      .then(setup_data => this.emitEvent(\"setup_data\", [setup_data])) // TODO: emit message action as event\n      .catch(err => this.emitEvent(\"error\"))\n    }\n\n    this._ws.onerror = () => {\n      this.emitEvent(\"error\");\n    }\n\n    this._ws.onclose = () => {\n      this.connected = false;\n      this.emitEvent(\"disconnect\")\n    }\n  }\n\n  /**\n   * Send a plain text message to the Game Server.\n   * You should almost certainly never have to use this publically.\n   *\n   * @param {string} message - Message to send.\n   */\n  send(message){\n    this._ws.send(message)\n  }\n\n  /**\n   * Generate protocol prefix from protocol Array.\n   *\n   * Convert array of ASCII indices to a string with the respective ASCII values.\n   *\n   * @param {Array} protocol - ASCII table indices.\n   * @return {string} the rotocol prefix string.\n   */\n  getProtocolString(protocol){\n    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), \"\")\n  }\n\n  /**\n   * Dispatch an action to the GameServer\n   *\n   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.\n   */\n  dispatch(action){\n    switch (action.type){\n      case this.Constants.GET_EVERYTHING:\n        this.send(this.getProtocolString[0, 0, 0, 1])\n      break;\n      default:\n      break;\n\n    }\n  }\n}\n\nexport default GameServer\n"
   },
   {
-    "__docId__": 12,
+    "__docId__": 21,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -234,7 +395,7 @@
     ]
   },
   {
-    "__docId__": 13,
+    "__docId__": 22,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -269,7 +430,7 @@
     "generator": false
   },
   {
-    "__docId__": 14,
+    "__docId__": 23,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -287,7 +448,7 @@
     }
   },
   {
-    "__docId__": 15,
+    "__docId__": 24,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -305,7 +466,7 @@
     }
   },
   {
-    "__docId__": 16,
+    "__docId__": 25,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -323,7 +484,7 @@
     }
   },
   {
-    "__docId__": 17,
+    "__docId__": 26,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -341,7 +502,7 @@
     }
   },
   {
-    "__docId__": 18,
+    "__docId__": 27,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -359,7 +520,7 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 28,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -373,7 +534,7 @@
     "generator": false
   },
   {
-    "__docId__": 20,
+    "__docId__": 29,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -391,7 +552,7 @@
     }
   },
   {
-    "__docId__": 21,
+    "__docId__": 30,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -409,7 +570,7 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 31,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -427,7 +588,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 32,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -452,7 +613,7 @@
     "generator": false
   },
   {
-    "__docId__": 24,
+    "__docId__": 33,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -485,7 +646,7 @@
     "generator": false
   },
   {
-    "__docId__": 25,
+    "__docId__": 34,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -510,7 +671,7 @@
     "generator": false
   },
   {
-    "__docId__": 26,
+    "__docId__": 35,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -523,7 +684,7 @@
     "content": "window.PIXI = require('phaser/build/custom/pixi')\nwindow.p2 = require('phaser/build/custom/p2')\nwindow.Phaser = require('phaser/build/custom/phaser-split')\nrequire(\"./../../plugins/phaser-plugin-isometric.js\")\n"
   },
   {
-    "__docId__": 27,
+    "__docId__": 36,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -533,41 +694,16 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { STAGE_WIDTH, STAGE_HEIGHT } from './config.js'\n\nimport Tile from './Components/Tile.js'\n\nvar game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);\nvar Woobloo = function (game) { };\nWoobloo.Boot = function (game) { };\n\nconst TILES = [\n  new Tile('grass', 'images/isometric/grass.png'),\n  new Tile('rock', 'images/isometric/rock.png'),\n]\n\nvar isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;\n\nWoobloo.Boot.prototype =\n{\n    init: function({Players, Map}){\n      this._players = Players;\n      this._map = Map;\n      this._map_tiles = this._map.length;\n      this._map_side = Tile.SIDE * this._map_tiles;\n      this._world_width = this._map_side * 1.9;\n      this._world_height = this._map_side;\n    },\n\n    getRandomInt: function(min, max) {\n      return Math.floor(Math.random() * (max - min)) + min;\n    },\n\n    preload: function () {\n\n        for(let i in TILES){\n            game.load.image(TILES[i].name, TILES[i].imageFile);\n        }\n\n        game.load.image(\"tile_info_bg\", \"images/tile_info.png\");\n\n        game.time.advancedTiming = true;\n\n\n        // Add and enable the plug-in.\n        game.plugins.add(new Phaser.Plugin.Isometric(game));\n\n        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default\n        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.\n        game.iso.anchor.setTo(0.5, 0.04);\n\n    },\n\n    renderHUD: function() {\n      hud = game.add.group();\n      infoPanel = game.add.text(STAGE_WIDTH - 200, STAGE_HEIGHT - 50, \"Test HUD\");\n      // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));\n      hud.addChild(infoPanel);\n\n      hud.fixedToCamera = true;\n\n      // game.add.image(0, 0, \"grass\")\n    },\n    create: function () {\n\n        game.world.setBounds(0, 0, this._world_width, this._world_height);\n        game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;\n        game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;\n\n        // Create a group for our tiles.\n        isoGroup = game.add.group();\n\n        // Let's make a load of tiles on a grid.\n        this.spawnTiles();\n\n        // Provide a 3D position for the cursor\n        cursorPos = new Phaser.Plugin.Isometric.Point3();\n\n        arrowKeys = game.input.keyboard.createCursorKeys();\n\n        this.renderHUD();\n    },\n    update: function () {\n        // Update the cursor position.\n        // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily\n        // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.\n        game.iso.unproject(game.input.activePointer.position, cursorPos);\n\n        // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.\n        isoGroup.forEach(function (tile) {\n            var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);\n            // If it does, do a little animation and tint change.\n            if (!tile.selected && inBounds) {\n                tile.selected = true;\n                tile.tint = 0x86bfda;\n                // console.log(tile);\n\n                tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                tile.infoPanel.anchor = new Phaser.Point(0, 1);\n                tile.infoPanel.visible = false\n                setTimeout(() => {\n                  // tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                  if(tile.selected)\n                    tile.infoPanel.visible = true\n                }, 1000);\n                // game.add.image();\n\n                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);\n            }\n            // If not, revert back to how it was.\n            else if (tile.selected && !inBounds) {\n                tile.selected = false;\n                tile.tint = 0xffffff;\n\n                if(tile.infoPanel)\n                  tile.infoPanel.kill()\n\n                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);\n            }\n        });\n\n        if (arrowKeys.up.isDown)\n         {\n             game.camera.y -= 4;\n         }\n         else if (arrowKeys.down.isDown)\n         {\n             game.camera.y += 4;\n         }\n\n         if (arrowKeys.left.isDown)\n         {\n             game.camera.x -= 4;\n         }\n         else if (arrowKeys.right.isDown)\n         {\n             game.camera.x += 4;\n         }\n\n         if(game.input.mousePointer.x <= STAGE_WIDTH*0.02 ){\n            game.camera.x -= 8;\n         } else if (game.input.mousePointer.x >= STAGE_WIDTH*0.98) {\n            game.camera.x += 8;\n         }\n\n         if(game.input.mousePointer.y <= STAGE_HEIGHT*0.02 ){\n            game.camera.y -= 8;\n         } else if (game.input.mousePointer.y >= STAGE_HEIGHT*0.98) {\n            game.camera.y += 8;\n         }\n    },\n    render: function () {\n        game.debug.text(`FPS: ${game.time.fps}` || '--', 4, 20, \"#bbb\");\n        game.debug.cameraInfo(game.camera, 32, 32);\n    },\n    spawnTiles: function () {\n        var tile;\n        for (var xx = 0; xx < this._map_tiles; xx ++) {\n            for (var yy = 0; yy < this._map_tiles; yy ++) {\n                // Create a tile using the new game.add.isoSprite factory method at the specified position.\n                // The last parameter is the group you want to add it to (just like game.add.sprite)\n                let tileData = this._map[xx][yy];\n                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, \"grass\", 0, isoGroup);\n                tile.anchor.set(0.5, 0);\n            }\n        }\n    }\n};\n\ngame.state.add('Boot', Woobloo.Boot);\n\nexport default game;\n"
+    "content": "import { STAGE_WIDTH, STAGE_HEIGHT } from './config.js'\n\nimport Tile from './Components/Tile.js'\nimport Map from './Components/Map.js'\n\nvar game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);\nvar Woobloo = function (game) { };\nWoobloo.Boot = function (game) { };\n\nvar isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;\n\nWoobloo.Boot.prototype =\n{\n    init: function(setup_data){\n\n      if(setup_data == undefined){\n        this._players = [];\n        this._map = Map.createGrassMap();\n      } else {\n        const {Players, Map} = setup_data;\n        this._players = Players;\n        this._map = Map;\n      }\n\n      this._world_width = this._map.width * Tile.SIDE * 1.9;\n      this._world_height = this._map.height * Tile.SIDE;\n    },\n\n    getRandomInt: function(min, max) {\n      return Math.floor(Math.random() * (max - min)) + min;\n    },\n\n    preload: function () {\n        // Add and enable the isometric plug-in.\n        game.plugins.add(new Phaser.Plugin.Isometric(game));\n        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default\n        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.\n        game.iso.anchor.setTo(0.5, 0.04);\n\n        game.time.advancedTiming = true;\n\n        game.load.image(\"tile_info_bg\", \"images/tile_info.png\");\n        this._map.preload(game);\n    },\n\n    renderHUD: function() {\n      hud = game.add.group();\n      infoPanel = game.add.text(STAGE_WIDTH - 200, STAGE_HEIGHT - 50, \"Test HUD\");\n      // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));\n      hud.addChild(infoPanel);\n\n      hud.fixedToCamera = true;\n\n      // game.add.image(0, 0, \"grass\")\n    },\n    create: function () {\n\n        game.world.setBounds(0, 0, this._world_width, this._world_height);\n        game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;\n        game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;\n\n        // Create a group for our tiles.\n        isoGroup = game.add.group();\n\n        // Let's make a load of tiles on a grid.\n        this.spawnTiles();\n\n        // Provide a 3D position for the cursor\n        cursorPos = new Phaser.Plugin.Isometric.Point3();\n\n        arrowKeys = game.input.keyboard.createCursorKeys();\n\n        this.renderHUD();\n    },\n    update: function () {\n        // Update the cursor position.\n        // It's important to understand that screen-to-isometric projection means you have to specify a z position manually, as this cannot be easily\n        // determined from the 2D pointer position without extra trickery. By default, the z position is 0 if not set.\n        game.iso.unproject(game.input.activePointer.position, cursorPos);\n\n        // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.\n        isoGroup.forEach(function (tile) {\n            var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);\n            // If it does, do a little animation and tint change.\n            if (!tile.selected && inBounds) {\n                tile.selected = true;\n                tile.tint = 0x86bfda;\n                // console.log(tile);\n\n                tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                tile.infoPanel.anchor = new Phaser.Point(0, 1);\n                tile.infoPanel.visible = false\n                setTimeout(() => {\n                  // tile.infoPanel = game.add.image(tile.x, tile.y, \"tile_info_bg\")\n                  if(tile.selected)\n                    tile.infoPanel.visible = true\n                }, 1000);\n                // game.add.image();\n\n                // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);\n            }\n            // If not, revert back to how it was.\n            else if (tile.selected && !inBounds) {\n                tile.selected = false;\n                tile.tint = 0xffffff;\n\n                if(tile.infoPanel)\n                  tile.infoPanel.kill()\n\n                // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);\n            }\n        });\n\n        if (arrowKeys.up.isDown)\n         {\n             game.camera.y -= 4;\n         }\n         else if (arrowKeys.down.isDown)\n         {\n             game.camera.y += 4;\n         }\n\n         if (arrowKeys.left.isDown)\n         {\n             game.camera.x -= 4;\n         }\n         else if (arrowKeys.right.isDown)\n         {\n             game.camera.x += 4;\n         }\n\n         if(game.input.mousePointer.x <= STAGE_WIDTH*0.02 ){\n            game.camera.x -= 8;\n         } else if (game.input.mousePointer.x >= STAGE_WIDTH*0.98) {\n            game.camera.x += 8;\n         }\n\n         if(game.input.mousePointer.y <= STAGE_HEIGHT*0.02 ){\n            game.camera.y -= 8;\n         } else if (game.input.mousePointer.y >= STAGE_HEIGHT*0.98) {\n            game.camera.y += 8;\n         }\n    },\n    render: function () {\n        game.debug.text(`FPS: ${game.time.fps}` || '--', 4, 20, \"#bbb\");\n        game.debug.cameraInfo(game.camera, 32, 32);\n    },\n    spawnTiles: function () {\n        var tile;\n        for (var xx = 0; xx < this._map.height; xx ++) {\n            for (var yy = 0; yy < this._map.width; yy ++) {\n                // Create a tile using the new game.add.isoSprite factory method at the specified position.\n                // The last parameter is the group you want to add it to (just like game.add.sprite)\n                let tileData = this._map._map[xx][yy];\n                tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, \"grass\", 0, isoGroup);\n                tile.anchor.set(0.5, 0);\n            }\n        }\n    }\n};\n\ngame.state.add('Boot', Woobloo.Boot);\n\nexport default game;\n"
   },
   {
-    "__docId__": 28,
+    "__docId__": 37,
     "kind": "function",
     "static": true,
     "variation": null,
     "name": "Woobloo",
     "memberof": "src/game.js",
     "longname": "src/game.js~Woobloo",
-    "access": null,
-    "export": false,
-    "importPath": "woobloo-frontend/src/game.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 6,
-    "undocument": true,
-    "params": [
-      {
-        "name": "game",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "generator": false
-  },
-  {
-    "__docId__": 29,
-    "kind": "function",
-    "static": true,
-    "variation": null,
-    "name": "Boot",
-    "memberof": "src/game.js",
-    "longname": "src/game.js~Boot",
     "access": null,
     "export": false,
     "importPath": "woobloo-frontend/src/game.js",
@@ -586,28 +722,32 @@
     "generator": false
   },
   {
-    "__docId__": 30,
-    "kind": "variable",
+    "__docId__": 38,
+    "kind": "function",
     "static": true,
     "variation": null,
-    "name": "TILES",
+    "name": "Boot",
     "memberof": "src/game.js",
-    "longname": "src/game.js~TILES",
+    "longname": "src/game.js~Boot",
     "access": null,
     "export": false,
     "importPath": "woobloo-frontend/src/game.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 8,
     "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
+    "params": [
+      {
+        "name": "game",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
   },
   {
-    "__docId__": 31,
+    "__docId__": 39,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -620,7 +760,7 @@
     "content": "import GameServer from \"./../core/GameServer.js\"\ndescribe(\"GameServer\", () => {\n  let gs;\n  beforeAll(() => {\n     gs = new GameServer('ws://159.203.237.59:8080', \"123e4567-e89b-12d3-a456-426655440000\");\n  })\n\n  describe(\"getProtocolString\", () => {\n    it(\"returns a string that's as long as the parameter number of bytes\", () => {\n      console.log(gs.getProtocolString([0, 0, 0, 1]));\n      expect(encodeURI(gs.getProtocolString([0, 0, 0, 1])).split(/%..|./).length - 1).toEqual(4);\n    })\n\n  })\n\n} )\n"
   },
   {
-    "__docId__": 33,
+    "__docId__": 41,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -633,7 +773,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 34,
+    "__docId__": 42,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -646,7 +786,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 35,
+    "__docId__": 43,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -659,7 +799,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 36,
+    "__docId__": 44,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -672,7 +812,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 37,
+    "__docId__": 45,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -685,7 +825,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 38,
+    "__docId__": 46,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -698,7 +838,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 39,
+    "__docId__": 47,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -711,7 +851,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 40,
+    "__docId__": 48,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -724,7 +864,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 41,
+    "__docId__": 49,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -737,7 +877,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 42,
+    "__docId__": 50,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -750,7 +890,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 43,
+    "__docId__": 51,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -763,7 +903,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 44,
+    "__docId__": 52,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -776,7 +916,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 45,
+    "__docId__": 53,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -789,7 +929,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 46,
+    "__docId__": 54,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -802,7 +942,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 47,
+    "__docId__": 55,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -815,7 +955,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 48,
+    "__docId__": 56,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -828,7 +968,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 49,
+    "__docId__": 57,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -841,7 +981,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 50,
+    "__docId__": 58,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -854,7 +994,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 51,
+    "__docId__": 59,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -867,7 +1007,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 52,
+    "__docId__": 60,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -880,7 +1020,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 53,
+    "__docId__": 61,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -893,7 +1033,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 54,
+    "__docId__": 62,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -906,7 +1046,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 55,
+    "__docId__": 63,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -919,7 +1059,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 56,
+    "__docId__": 64,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -932,7 +1072,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 57,
+    "__docId__": 65,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -945,7 +1085,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 58,
+    "__docId__": 66,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -958,7 +1098,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 59,
+    "__docId__": 67,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -971,7 +1111,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 60,
+    "__docId__": 68,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -984,7 +1124,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 61,
+    "__docId__": 69,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -997,7 +1137,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 62,
+    "__docId__": 70,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1010,7 +1150,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 63,
+    "__docId__": 71,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1023,7 +1163,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 64,
+    "__docId__": 72,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1036,7 +1176,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 65,
+    "__docId__": 73,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1049,7 +1189,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 66,
+    "__docId__": 74,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1062,7 +1202,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 67,
+    "__docId__": 75,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1075,7 +1215,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 68,
+    "__docId__": 76,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1088,7 +1228,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 69,
+    "__docId__": 77,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1101,7 +1241,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 70,
+    "__docId__": 78,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1114,7 +1254,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 71,
+    "__docId__": 79,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1127,7 +1267,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 72,
+    "__docId__": 80,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1140,7 +1280,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 73,
+    "__docId__": 81,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1153,7 +1293,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 74,
+    "__docId__": 82,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1166,7 +1306,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 75,
+    "__docId__": 83,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1179,7 +1319,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 76,
+    "__docId__": 84,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1192,7 +1332,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 77,
+    "__docId__": 85,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1205,7 +1345,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 78,
+    "__docId__": 86,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1218,7 +1358,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 79,
+    "__docId__": 87,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1231,7 +1371,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 81,
+    "__docId__": 89,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1244,7 +1384,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 82,
+    "__docId__": 90,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1257,7 +1397,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 83,
+    "__docId__": 91,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1270,7 +1410,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 84,
+    "__docId__": 92,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1283,7 +1423,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 85,
+    "__docId__": 93,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1296,7 +1436,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 86,
+    "__docId__": 94,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1309,7 +1449,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 87,
+    "__docId__": 95,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1322,7 +1462,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 88,
+    "__docId__": 96,
     "kind": "external",
     "static": true,
     "variation": null,

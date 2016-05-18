@@ -100416,6 +100416,88 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Tile = require("./Tile");
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+  * A class that represents a Map, and includes helper functions
+  * including a render method.
+  */
+
+var Map = function () {
+
+  /**
+    * Create a new map object using JSON data that represents a map.
+    * Usually in the same format as GameServer provided data.
+    */
+
+  function Map(mapData) {
+    _classCallCheck(this, Map);
+
+    this._map = mapData;
+    this.height = mapData.length;
+    this.width = mapData[0].length;
+
+    this._tileset = ["grass", "rock"];
+  }
+
+  /**
+    * Preload all the resources used by a Map object
+    */
+
+
+  _createClass(Map, [{
+    key: "preload",
+    value: function preload(game) {
+      for (var i in this._tileset) {
+        game.load.image(this._tileset[i], "images/isometric/" + this._tileset[i] + ".png");
+      }
+    }
+
+    /**
+      * Create a new test map object of only grass tiles.
+      *
+      * return {Map} the grass map.
+      */
+
+  }], [{
+    key: "createGrassMap",
+    value: function createGrassMap() {
+      var map = [];
+
+      for (var i = 0; i < 50; i++) {
+        map[i] = [];
+        for (var j = 0; j < 50; j++) {
+          map[i][j] = new _Tile2.default({
+            type: "grass",
+            pos: { x: i, y: j }
+          });
+        }
+      }
+
+      return new Map(map);
+    }
+  }]);
+
+  return Map;
+}();
+
+exports.default = Map;
+
+},{"./Tile":8}],8:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Tile = function () {
@@ -100426,10 +100508,15 @@ var Tile = function () {
     }
   }]);
 
-  function Tile(name) {
+  function Tile(_ref) {
+    var _ref$type = _ref.type;
+    var type = _ref$type === undefined ? "grass" : _ref$type;
+    var pos = _ref.pos;
+
     _classCallCheck(this, Tile);
 
-    this.name = name;
+    this.type = type;
+    this.pos = pos;
   }
 
   return Tile;
@@ -100437,7 +100524,7 @@ var Tile = function () {
 
 exports.default = Tile;
 
-},{}],8:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 'use strict';
 
 var _SetupPhaser = require('./core/SetupPhaser.js');
@@ -100455,7 +100542,7 @@ var _GameServer2 = _interopRequireDefault(_GameServer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
-gs.connect();
+// gs.connect();
 
 gs.on('connected', function () {
   gs.dispatch(gs.Actions.getEverything());
@@ -100469,11 +100556,11 @@ gs.on('disconnect', function () {
   console.log("Server Disconnected");
 });
 
-gs.on('setup_data', function (setup_data) {
-  _game2.default.state.start('Boot', true, false, setup_data);
-});
+// gs.on('setup_data', setup_data => {
+_game2.default.state.start('Boot', true, false);
+// });
 
-},{"./core/GameServer.js":10,"./core/SetupPhaser.js":11,"./game.js":12}],9:[function(require,module,exports){
+},{"./core/GameServer.js":11,"./core/SetupPhaser.js":12,"./game.js":13}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -100482,7 +100569,7 @@ Object.defineProperty(exports, "__esModule", {
 var STAGE_WIDTH = exports.STAGE_WIDTH = window.innerWidth;
 var STAGE_HEIGHT = exports.STAGE_HEIGHT = window.innerHeight;
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -100635,7 +100722,7 @@ var GameServer = function (_EventEmitter) {
 
 exports.default = GameServer;
 
-},{"wolfy87-eventemitter":5}],11:[function(require,module,exports){
+},{"wolfy87-eventemitter":5}],12:[function(require,module,exports){
 'use strict';
 
 window.PIXI = require('phaser/build/custom/pixi');
@@ -100643,7 +100730,7 @@ window.p2 = require('phaser/build/custom/p2');
 window.Phaser = require('phaser/build/custom/phaser-split');
 require("./../../plugins/phaser-plugin-isometric.js");
 
-},{"./../../plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],12:[function(require,module,exports){
+},{"./../../plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -100656,27 +100743,34 @@ var _Tile = require('./Components/Tile.js');
 
 var _Tile2 = _interopRequireDefault(_Tile);
 
+var _Map2 = require('./Components/Map.js');
+
+var _Map3 = _interopRequireDefault(_Map2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);
 var Woobloo = function Woobloo(game) {};
 Woobloo.Boot = function (game) {};
 
-var TILES = ["grass", "rock"];
-
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 Woobloo.Boot.prototype = {
-    init: function init(_ref) {
-        var Players = _ref.Players;
-        var Map = _ref.Map;
+    init: function init(setup_data) {
 
-        this._players = Players;
-        this._map = Map;
-        this._map_tiles = this._map.length;
-        this._map_side = _Tile2.default.SIDE * this._map_tiles;
-        this._world_width = this._map_side * 1.9;
-        this._world_height = this._map_side;
+        if (setup_data == undefined) {
+            this._players = [];
+            this._map = _Map3.default.createGrassMap();
+        } else {
+            var Players = setup_data.Players;
+            var _Map = setup_data.Map;
+
+            this._players = Players;
+            this._map = _Map;
+        }
+
+        this._world_width = this._map.width * _Tile2.default.SIDE * 1.9;
+        this._world_height = this._map.height * _Tile2.default.SIDE;
     },
 
     getRandomInt: function getRandomInt(min, max) {
@@ -100684,21 +100778,16 @@ Woobloo.Boot.prototype = {
     },
 
     preload: function preload() {
-
-        for (var i in TILES) {
-            game.load.image(TILES[i], 'images/isomorphic/' + TILES[i] + '.png');
-        }
-
-        game.load.image("tile_info_bg", "images/tile_info.png");
-
-        game.time.advancedTiming = true;
-
-        // Add and enable the plug-in.
+        // Add and enable the isometric plug-in.
         game.plugins.add(new Phaser.Plugin.Isometric(game));
-
         // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
         // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
         game.iso.anchor.setTo(0.5, 0.04);
+
+        game.time.advancedTiming = true;
+
+        game.load.image("tile_info_bg", "images/tile_info.png");
+        this._map.preload(game);
     },
 
     renderHUD: function renderHUD() {
@@ -100797,12 +100886,12 @@ Woobloo.Boot.prototype = {
     },
     spawnTiles: function spawnTiles() {
         var tile;
-        for (var xx = 0; xx < this._map_tiles; xx++) {
-            for (var yy = 0; yy < this._map_tiles; yy++) {
+        for (var xx = 0; xx < this._map.height; xx++) {
+            for (var yy = 0; yy < this._map.width; yy++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                var tileData = this._map[xx][yy];
-                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
+                var tileData = this._map._map[xx][yy];
+                tile = game.add.isoSprite(tileData.pos.x * _Tile2.default.SIDE, tileData.pos.y * _Tile2.default.SIDE, 0, "grass", 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }
@@ -100813,5 +100902,5 @@ game.state.add('Boot', Woobloo.Boot);
 
 exports.default = game;
 
-},{"./Components/Tile.js":7,"./config.js":9}]},{},[8])
+},{"./Components/Map.js":7,"./Components/Tile.js":8,"./config.js":10}]},{},[9])
 //# sourceMappingURL=app.js.map

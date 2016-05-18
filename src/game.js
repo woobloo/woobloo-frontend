@@ -1,27 +1,29 @@
 import { STAGE_WIDTH, STAGE_HEIGHT } from './config.js'
 
 import Tile from './Components/Tile.js'
+import Map from './Components/Map.js'
 
 var game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);
 var Woobloo = function (game) { };
 Woobloo.Boot = function (game) { };
 
-const TILES = [
-  "grass",
-  "rock"
-]
-
 var isoGroup, cursorPos, cursor, arrowKeys, infoPanel, hud;
 
 Woobloo.Boot.prototype =
 {
-    init: function({Players, Map}){
-      this._players = Players;
-      this._map = Map;
-      this._map_tiles = this._map.length;
-      this._map_side = Tile.SIDE * this._map_tiles;
-      this._world_width = this._map_side * 1.9;
-      this._world_height = this._map_side;
+    init: function(setup_data){
+
+      if(setup_data == undefined){
+        this._players = [];
+        this._map = Map.createGrassMap();
+      } else {
+        const {Players, Map} = setup_data;
+        this._players = Players;
+        this._map = Map;
+      }
+
+      this._world_width = this._map.width * Tile.SIDE * 1.9;
+      this._world_height = this._map.height * Tile.SIDE;
     },
 
     getRandomInt: function(min, max) {
@@ -29,23 +31,16 @@ Woobloo.Boot.prototype =
     },
 
     preload: function () {
-
-        for(let i in TILES){
-            game.load.image(TILES[i], `images/isomorphic/${TILES[i]}.png`);
-        }
-
-        game.load.image("tile_info_bg", "images/tile_info.png");
-
-        game.time.advancedTiming = true;
-
-
-        // Add and enable the plug-in.
+        // Add and enable the isometric plug-in.
         game.plugins.add(new Phaser.Plugin.Isometric(game));
-
         // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
         // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
         game.iso.anchor.setTo(0.5, 0.04);
 
+        game.time.advancedTiming = true;
+
+        game.load.image("tile_info_bg", "images/tile_info.png");
+        this._map.preload(game);
     },
 
     renderHUD: function() {
@@ -152,12 +147,12 @@ Woobloo.Boot.prototype =
     },
     spawnTiles: function () {
         var tile;
-        for (var xx = 0; xx < this._map_tiles; xx ++) {
-            for (var yy = 0; yy < this._map_tiles; yy ++) {
+        for (var xx = 0; xx < this._map.height; xx ++) {
+            for (var yy = 0; yy < this._map.width; yy ++) {
                 // Create a tile using the new game.add.isoSprite factory method at the specified position.
                 // The last parameter is the group you want to add it to (just like game.add.sprite)
-                let tileData = this._map[xx][yy];
-                tile = game.add.isoSprite(tileData.X, tileData.Y, 0, "grass", 0, isoGroup);
+                let tileData = this._map._map[xx][yy];
+                tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, "grass", 0, isoGroup);
                 tile.anchor.set(0.5, 0);
             }
         }

@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl">
-  <title data-ice="title">API Document</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">src/Components/Map.js | API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -41,23 +41,63 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="woobloo">woobloo</h1>
-<p>This is the static implementation of the woobloo frontend.</p>
-<p>Ideally, this codebase will run independently and can be hosted using any static site provider (such as github pages for a proof of concept). The only dependency will be to a gameserver url, which can be provided as a hash parameter for instance)</p>
-<h2 id="setup-development-mode">Setup - Development Mode</h2>
-<ol>
-<li>Clone repository</li>
-<li>Navigate to directory</li>
-<li><code>npm install</code></li>
-<li><code>npm test</code> (Unit testing is good)</li>
-<li><code>npm start</code></li>
-</ol>
-<h2 id="tools">Tools</h2>
-<ul>
-<li><code>npm test</code></li>
-<li><code>npm run docs</code></li>
-</ul>
-</div>
+<div class="content" data-ice="content"><h1 data-ice="title">src/Components/Map.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Tile from &apos;./Tile&apos;
+
+/**
+  * A class that represents a Map, and includes helper functions
+  * including a render method.
+  */
+class Map {
+
+    /**
+      * Create a new map object using JSON data that represents a map.
+      * Usually in the same format as GameServer provided data.
+      */
+    constructor(mapData){
+      this._map = mapData;
+      this.height = mapData.length;
+      this.width = mapData[0].length;
+
+      this._tileset = [&quot;grass&quot;,&quot;rock&quot;]
+    }
+
+    /**
+      * Preload all the resources used by a Map object
+      */
+      preload(game){
+        for(let i in this._tileset){
+            game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);
+        }
+      }
+
+    /**
+      * Create a new test map object of only grass tiles.
+      *
+      * return {Map} the grass map.
+      */
+    static createGrassMap(){
+      let map = [];
+
+      for(var i = 0; i &lt; 50; i++){
+        map[i] = [];
+          for(var j = 0; j &lt; 50; j++){
+            map[i][j] = new Tile(
+              {
+                type: &quot;grass&quot;,
+                pos: { x: i,y: j }
+              }
+            );
+          }
+      }
+
+      return new Map(map);
+    }
+}
+
+export default Map
+</code></pre>
+
 </div>
 
 <footer class="footer">
