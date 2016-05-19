@@ -100637,6 +100637,133 @@ exports.default = Tile;
 },{}],9:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _config = require('./../config.js');
+
+var _Tile = require('./../Components/Tile.js');
+
+var _Tile2 = _interopRequireDefault(_Tile);
+
+var _Map2 = require('./../Components/Map.js');
+
+var _Map3 = _interopRequireDefault(_Map2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var cursorPos, cursor, arrowKeys, infoPanel, hud;
+
+/**
+  * Get the 'Game' Phaser game state.
+  *
+  * This is the state during gameplay
+  * @param {Phaser.Game} game - The game object
+  * @return {Phaser.Game.State} - The state
+  */
+var Game = function Game(game) {
+    return {
+        init: function init(setup_data) {
+
+            if (setup_data == undefined) {
+                this._players = [];
+                this._map = _Map3.default.createGrassMap();
+            } else {
+                var Players = setup_data.Players;
+                var _Map = setup_data.Map;
+
+                this._players = Players;
+                this._map = _Map;
+            }
+
+            this._world_width = this._map.width * _Tile2.default.SIDE * 1.9;
+            this._world_height = this._map.height * _Tile2.default.SIDE;
+        },
+
+        getRandomInt: function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        },
+
+        preload: function preload() {
+            // Add and enable the isometric plug-in.
+            game.plugins.add(new Phaser.Plugin.Isometric(game));
+            // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
+            // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
+            game.iso.anchor.setTo(0.5, 0.04);
+
+            game.time.advancedTiming = true;
+
+            game.load.image("tile_info_bg", "images/tile_info.png");
+            this._map.preload(game);
+        },
+
+        renderHUD: function renderHUD() {
+            hud = game.add.group();
+            infoPanel = game.add.text(_config.STAGE_WIDTH - 200, _config.STAGE_HEIGHT - 50, "Test HUD");
+            // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));
+            hud.addChild(infoPanel);
+
+            hud.fixedToCamera = true;
+
+            // game.add.image(0, 0, "grass")
+        },
+        create: function create() {
+
+            game.world.setBounds(0, 0, this._world_width, this._world_height);
+            game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
+            game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
+
+            this._map.render(game);
+
+            // Provide a 3D position for the cursor
+            cursorPos = new Phaser.Plugin.Isometric.Point3();
+
+            arrowKeys = game.input.keyboard.createCursorKeys();
+
+            this.renderHUD();
+        },
+        update: function update() {
+            // Update the cursor position.
+            game.iso.unproject(game.input.activePointer.position, cursorPos);
+            this._map.update(game, cursorPos);
+
+            if (arrowKeys.up.isDown) {
+                game.camera.y -= 4;
+            } else if (arrowKeys.down.isDown) {
+                game.camera.y += 4;
+            }
+
+            if (arrowKeys.left.isDown) {
+                game.camera.x -= 4;
+            } else if (arrowKeys.right.isDown) {
+                game.camera.x += 4;
+            }
+
+            if (game.input.mousePointer.x <= _config.STAGE_WIDTH * 0.02) {
+                game.camera.x -= 8;
+            } else if (game.input.mousePointer.x >= _config.STAGE_WIDTH * 0.98) {
+                game.camera.x += 8;
+            }
+
+            if (game.input.mousePointer.y <= _config.STAGE_HEIGHT * 0.02) {
+                game.camera.y -= 8;
+            } else if (game.input.mousePointer.y >= _config.STAGE_HEIGHT * 0.98) {
+                game.camera.y += 8;
+            }
+        },
+        render: function render() {
+            game.debug.text('FPS: ' + game.time.fps || '--', 4, 20, "#bbb");
+            // game.debug.cameraInfo(game.camera, 32, 32);
+        }
+    };
+};
+
+exports.default = Game;
+
+},{"./../Components/Map.js":7,"./../Components/Tile.js":8,"./../config.js":11}],10:[function(require,module,exports){
+'use strict';
+
 var _SetupPhaser = require('./core/SetupPhaser.js');
 
 var _SetupPhaser2 = _interopRequireDefault(_SetupPhaser);
@@ -100667,10 +100794,10 @@ gs.on('disconnect', function () {
 });
 
 // gs.on('setup_data', setup_data => {
-_game2.default.state.start('Boot', true, false);
+_game2.default.state.start('Game', true, false);
 // });
 
-},{"./core/GameServer.js":11,"./core/SetupPhaser.js":12,"./game.js":13}],10:[function(require,module,exports){
+},{"./core/GameServer.js":12,"./core/SetupPhaser.js":13,"./game.js":14}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -100688,7 +100815,7 @@ var STAGE_WIDTH = exports.STAGE_WIDTH = window.innerWidth;
   */
 var STAGE_HEIGHT = exports.STAGE_HEIGHT = window.innerHeight;
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -100836,8 +100963,8 @@ var GameServer = function (_EventEmitter) {
      */
 
   }, {
-    key: "send",
-    value: function send(message) {
+    key: "_send",
+    value: function _send(message) {
       this._ws.send(message);
     }
 
@@ -100869,7 +100996,7 @@ var GameServer = function (_EventEmitter) {
     value: function dispatch(action) {
       switch (action.type) {
         case this.Constants.GET_EVERYTHING:
-          this.send(this.getProtocolString[(0, 0, 0, 1)]);
+          this._send(this.getProtocolString([0, 0, 0, 1]));
           break;
         default:
           break;
@@ -100883,7 +101010,7 @@ var GameServer = function (_EventEmitter) {
 
 exports.default = GameServer;
 
-},{"wolfy87-eventemitter":5}],12:[function(require,module,exports){
+},{"wolfy87-eventemitter":5}],13:[function(require,module,exports){
 'use strict';
 
 window.PIXI = require('phaser/build/custom/pixi');
@@ -100891,129 +101018,25 @@ window.p2 = require('phaser/build/custom/p2');
 window.Phaser = require('phaser/build/custom/phaser-split');
 require("./../../plugins/phaser-plugin-isometric.js");
 
-},{"./../../plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],13:[function(require,module,exports){
+},{"./../../plugins/phaser-plugin-isometric.js":6,"phaser/build/custom/p2":1,"phaser/build/custom/phaser-split":2,"phaser/build/custom/pixi":3}],14:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _config = require('./config.js');
 
-var _Tile = require('./Components/Tile.js');
+var _Game = require('./GameStates/Game.js');
 
-var _Tile2 = _interopRequireDefault(_Tile);
-
-var _Map2 = require('./Components/Map.js');
-
-var _Map3 = _interopRequireDefault(_Map2);
+var _Game2 = _interopRequireDefault(_Game);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var game = new Phaser.Game(_config.STAGE_WIDTH, _config.STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);
-var Woobloo = function Woobloo(game) {};
-Woobloo.Boot = function (game) {};
 
-var cursorPos, cursor, arrowKeys, infoPanel, hud;
-
-Woobloo.Boot.prototype = {
-    init: function init(setup_data) {
-
-        if (setup_data == undefined) {
-            this._players = [];
-            this._map = _Map3.default.createGrassMap();
-        } else {
-            var Players = setup_data.Players;
-            var _Map = setup_data.Map;
-
-            this._players = Players;
-            this._map = _Map;
-        }
-
-        this._world_width = this._map.width * _Tile2.default.SIDE * 1.9;
-        this._world_height = this._map.height * _Tile2.default.SIDE;
-    },
-
-    getRandomInt: function getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min)) + min;
-    },
-
-    preload: function preload() {
-        // Add and enable the isometric plug-in.
-        game.plugins.add(new Phaser.Plugin.Isometric(game));
-        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default
-        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.
-        game.iso.anchor.setTo(0.5, 0.04);
-
-        game.time.advancedTiming = true;
-
-        game.load.image("tile_info_bg", "images/tile_info.png");
-        this._map.preload(game);
-    },
-
-    renderHUD: function renderHUD() {
-        hud = game.add.group();
-        infoPanel = game.add.text(_config.STAGE_WIDTH - 200, _config.STAGE_HEIGHT - 50, "Test HUD");
-        // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));
-        hud.addChild(infoPanel);
-
-        hud.fixedToCamera = true;
-
-        // game.add.image(0, 0, "grass")
-    },
-    create: function create() {
-
-        game.world.setBounds(0, 0, this._world_width, this._world_height);
-        game.camera.x = this._world_width / 2 - _config.STAGE_WIDTH / 2;
-        game.camera.y = this._world_height / 2 - _config.STAGE_HEIGHT / 2;
-
-        this._map.render(game);
-
-        // Provide a 3D position for the cursor
-        cursorPos = new Phaser.Plugin.Isometric.Point3();
-
-        arrowKeys = game.input.keyboard.createCursorKeys();
-
-        this.renderHUD();
-    },
-    update: function update() {
-        // Update the cursor position.
-        game.iso.unproject(game.input.activePointer.position, cursorPos);
-        this._map.update(game, cursorPos);
-
-        if (arrowKeys.up.isDown) {
-            game.camera.y -= 4;
-        } else if (arrowKeys.down.isDown) {
-            game.camera.y += 4;
-        }
-
-        if (arrowKeys.left.isDown) {
-            game.camera.x -= 4;
-        } else if (arrowKeys.right.isDown) {
-            game.camera.x += 4;
-        }
-
-        if (game.input.mousePointer.x <= _config.STAGE_WIDTH * 0.02) {
-            game.camera.x -= 8;
-        } else if (game.input.mousePointer.x >= _config.STAGE_WIDTH * 0.98) {
-            game.camera.x += 8;
-        }
-
-        if (game.input.mousePointer.y <= _config.STAGE_HEIGHT * 0.02) {
-            game.camera.y -= 8;
-        } else if (game.input.mousePointer.y >= _config.STAGE_HEIGHT * 0.98) {
-            game.camera.y += 8;
-        }
-    },
-    render: function render() {
-        game.debug.text('FPS: ' + game.time.fps || '--', 4, 20, "#bbb");
-        // game.debug.cameraInfo(game.camera, 32, 32);
-    }
-};
-
-game.state.add('Boot', Woobloo.Boot);
-
+game.state.add('Game', (0, _Game2.default)(game));
 exports.default = game;
 
-},{"./Components/Map.js":7,"./Components/Tile.js":8,"./config.js":10}]},{},[9])
+},{"./GameStates/Game.js":9,"./config.js":11}]},{},[10])
 //# sourceMappingURL=app.js.map

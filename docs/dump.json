@@ -438,16 +438,65 @@
     "kind": "file",
     "static": true,
     "variation": null,
+    "name": "src/GameStates/Game.js",
+    "memberof": null,
+    "longname": "src/GameStates/Game.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import { STAGE_WIDTH, STAGE_HEIGHT } from './../config.js'\nimport Tile from './../Components/Tile.js'\nimport Map from './../Components/Map.js'\n\nvar cursorPos, cursor, arrowKeys, infoPanel, hud;\n\n/**\n  * Get the 'Game' Phaser game state.\n  *\n  * This is the state during gameplay\n  * @param {Phaser.Game} game - The game object\n  * @return {Phaser.Game.State} - The state\n  */\nconst Game = function (game) {\n  return {\n      init: function(setup_data){\n\n        if(setup_data == undefined){\n          this._players = [];\n          this._map = Map.createGrassMap();\n        } else {\n          const {Players, Map} = setup_data;\n          this._players = Players;\n          this._map = Map;\n        }\n\n        this._world_width = this._map.width * Tile.SIDE * 1.9;\n        this._world_height = this._map.height * Tile.SIDE;\n      },\n\n      getRandomInt: function(min, max) {\n        return Math.floor(Math.random() * (max - min)) + min;\n      },\n\n      preload: function () {\n          // Add and enable the isometric plug-in.\n          game.plugins.add(new Phaser.Plugin.Isometric(game));\n          // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default\n          // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.\n          game.iso.anchor.setTo(0.5, 0.04);\n\n          game.time.advancedTiming = true;\n\n          game.load.image(\"tile_info_bg\", \"images/tile_info.png\");\n          this._map.preload(game);\n      },\n\n      renderHUD: function() {\n        hud = game.add.group();\n        infoPanel = game.add.text(STAGE_WIDTH - 200, STAGE_HEIGHT - 50, \"Test HUD\");\n        // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));\n        hud.addChild(infoPanel);\n\n        hud.fixedToCamera = true;\n\n        // game.add.image(0, 0, \"grass\")\n      },\n      create: function () {\n\n          game.world.setBounds(0, 0, this._world_width, this._world_height);\n          game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;\n          game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;\n\n          this._map.render(game);\n\n          // Provide a 3D position for the cursor\n          cursorPos = new Phaser.Plugin.Isometric.Point3();\n\n          arrowKeys = game.input.keyboard.createCursorKeys();\n\n          this.renderHUD();\n      },\n      update: function () {\n          // Update the cursor position.\n          game.iso.unproject(game.input.activePointer.position, cursorPos);\n          this._map.update(game, cursorPos)\n\n          if (arrowKeys.up.isDown)\n           {\n               game.camera.y -= 4;\n           }\n           else if (arrowKeys.down.isDown)\n           {\n               game.camera.y += 4;\n           }\n\n           if (arrowKeys.left.isDown)\n           {\n               game.camera.x -= 4;\n           }\n           else if (arrowKeys.right.isDown)\n           {\n               game.camera.x += 4;\n           }\n\n           if(game.input.mousePointer.x <= STAGE_WIDTH*0.02 ){\n              game.camera.x -= 8;\n           } else if (game.input.mousePointer.x >= STAGE_WIDTH*0.98) {\n              game.camera.x += 8;\n           }\n\n           if(game.input.mousePointer.y <= STAGE_HEIGHT*0.02 ){\n              game.camera.y -= 8;\n           } else if (game.input.mousePointer.y >= STAGE_HEIGHT*0.98) {\n              game.camera.y += 8;\n           }\n      },\n      render: function () {\n          game.debug.text(`FPS: ${game.time.fps}` || '--', 4, 20, \"#bbb\");\n          // game.debug.cameraInfo(game.camera, 32, 32);\n      }\n  };\n\n };\n\nexport default Game;\n"
+  },
+  {
+    "__docId__": 19,
+    "kind": "function",
+    "static": true,
+    "variation": null,
+    "name": "Game",
+    "memberof": "src/GameStates/Game.js",
+    "longname": "src/GameStates/Game.js~Game",
+    "access": null,
+    "export": true,
+    "importPath": "woobloo-frontend/src/GameStates/Game.js",
+    "importStyle": "Game",
+    "description": "Get the 'Game' Phaser game state.\n\nThis is the state during gameplay",
+    "lineNumber": 14,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Phaser.Game"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "game",
+        "description": "The game object"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Phaser.Game.State"
+      ],
+      "spread": false,
+      "description": "The state"
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "file",
+    "static": true,
+    "variation": null,
     "name": "src/app.js",
     "memberof": null,
     "longname": "src/app.js",
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import SetupPhaser from './core/SetupPhaser.js'\nimport Game from './game.js'\nimport GameServer from './core/GameServer.js'\n\nconst gs = new GameServer('ws://159.203.237.59:8080', \"123e4567-e89b-12d3-a456-426655440000\");\n// gs.connect();\n\ngs.on('connected', () => {\n  gs.dispatch(gs.Actions.getEverything());\n})\n\ngs.on('error', () => {\n  console.error(\"There was an error connecting to the server\");\n})\n\ngs.on('disconnect', () => {\n  console.log(\"Server Disconnected\");\n})\n\n// gs.on('setup_data', setup_data => {\n  Game.state.start('Boot', true, false);\n// });\n"
+    "content": "import SetupPhaser from './core/SetupPhaser.js'\nimport Game from './game.js'\nimport GameServer from './core/GameServer.js'\n\nconst gs = new GameServer('ws://159.203.237.59:8080', \"123e4567-e89b-12d3-a456-426655440000\");\n// gs.connect();\n\ngs.on('connected', () => {\n  gs.dispatch(gs.Actions.getEverything());\n})\n\ngs.on('error', () => {\n  console.error(\"There was an error connecting to the server\");\n})\n\ngs.on('disconnect', () => {\n  console.log(\"Server Disconnected\");\n})\n\n// gs.on('setup_data', setup_data => {\n  Game.state.start('Game', true, false);\n// });\n"
   },
   {
-    "__docId__": 19,
+    "__docId__": 21,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -468,7 +517,7 @@
     }
   },
   {
-    "__docId__": 20,
+    "__docId__": 22,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -481,7 +530,7 @@
     "content": "/**\n  * Width of the Stage (Game Window)\n  * @type {Number}\n  */\nexport const STAGE_WIDTH = window.innerWidth;\n\n/**\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  */\nexport const STAGE_HEIGHT = window.innerHeight;\n"
   },
   {
-    "__docId__": 21,
+    "__docId__": 23,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -504,7 +553,7 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 24,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -527,7 +576,7 @@
     }
   },
   {
-    "__docId__": 23,
+    "__docId__": 25,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -537,10 +586,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "\"use strict\";\nimport EventEmitter from 'wolfy87-eventemitter'\n\n/**\n * The GameServer Class is the primary way to communicate with a Game Server.\n * It uses WebSockets to implement bi-directional communication.\n * It extends EventEmitter which means you can subscribe to GameServer events.\n * @extends {EventEmitter}\n */\nclass GameServer extends EventEmitter{\n\n  /**\n    * List of all the possible action types.\n    * @const\n    * @type {Object}\n    */\n  static get Constants(){\n    return {\n      GET_EVERYTHING : \"GET_EVERYTHING\"\n    }\n  }\n\n  /**\n  * All the possible actions that can be requested of the Game Server.\n  *\n  * These functions return an action object that should be passed as an\n  * argument to {@link dispatch} for the action to be exectued.\n  *\n  * This resembles the redux architecture.\n  * @type {Object}\n  * @example\n  * GameServer gs = new GameServer(...);\n  * gs.connect();\n  * gs.dispatch(gs.Actions.getEverything());\n  */\n  static get Actions(){\n    return {\n      getEverything: () => ({type: this.Constants.GET_EVERYTHING})\n    }\n  }\n\n  /**\n   * Creates a GameServer\n   *\n   * @param  {String} server - Hostname/IP (prepended with a \"ws://\") of game\n   * server.\n   * @param {String} playerHash - Unique Hash that represents the player.\n   */\n  constructor(server, playerHash){\n    super()\n    this._server = server;\n    this._playerHash = playerHash;\n\n    /**\n      * Flag to check if server is connected\n      * @type {Boolean}\n      */\n    this.connected = false;\n\n  }\n\n  /**\n   * Connect to the Game Server\n   * @emits {\"connect\"} - connected to the Game Server\n   * @emits {\"error\"} - error while (or after) connecting to the Game Server\n   * @emits {\"disconnect\"} - disconnected from the Game Server\n   */\n  connect(){\n    this._ws = new WebSocket(this._server + \"/\" + this._playerHash)\n    this._ws.binaryType = \"arraybuffer\";\n    this._ws.onopen = (event) => {\n      this.connected = true;\n      this.emitEvent(\"connect\");\n    }\n\n    this._ws.onmessage = (message) => {\n      Promise.resolve(message)\n      .then(data => data.json())\n      .then(setup_data => this.emitEvent(\"setup_data\", [setup_data])) // TODO: emit message action as event\n      .catch(err => this.emitEvent(\"error\"))\n    }\n\n    this._ws.onerror = () => {\n      this.emitEvent(\"error\");\n    }\n\n    this._ws.onclose = () => {\n      this.connected = false;\n      this.emitEvent(\"disconnect\")\n    }\n  }\n\n  /**\n   * Send a plain text message to the Game Server.\n   * You should almost certainly never have to use this publically.\n   *\n   * @param {String} message - Message to send.\n   */\n  send(message){\n    this._ws.send(message)\n  }\n\n  /**\n   * Generate protocol prefix from protocol Array.\n   *\n   * Convert array of ASCII indices to a string with the respective ASCII values.\n   *\n   * @param {Array} protocol - ASCII table indices.\n   * @return {String} the rotocol prefix string.\n   */\n  getProtocolString(protocol){\n    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), \"\")\n  }\n\n  /**\n   * Dispatch an action to the GameServer\n   *\n   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.\n   */\n  dispatch(action){\n    switch (action.type){\n      case this.Constants.GET_EVERYTHING:\n        this.send(this.getProtocolString[0, 0, 0, 1])\n      break;\n      default:\n      break;\n\n    }\n  }\n}\n\nexport default GameServer\n"
+    "content": "\"use strict\";\nimport EventEmitter from 'wolfy87-eventemitter'\n\n/**\n * The GameServer Class is the primary way to communicate with a Game Server.\n * It uses WebSockets to implement bi-directional communication.\n * It extends EventEmitter which means you can subscribe to GameServer events.\n * @extends {EventEmitter}\n */\nclass GameServer extends EventEmitter{\n\n  /**\n    * List of all the possible action types.\n    * @const\n    * @type {Object}\n    */\n  static get Constants(){\n    return {\n      GET_EVERYTHING : \"GET_EVERYTHING\"\n    }\n  }\n\n  /**\n  * All the possible actions that can be requested of the Game Server.\n  *\n  * These functions return an action object that should be passed as an\n  * argument to {@link dispatch} for the action to be exectued.\n  *\n  * This resembles the redux architecture.\n  * @type {Object}\n  * @example\n  * GameServer gs = new GameServer(...);\n  * gs.connect();\n  * gs.dispatch(gs.Actions.getEverything());\n  */\n  static get Actions(){\n    return {\n      getEverything: () => ({type: this.Constants.GET_EVERYTHING})\n    }\n  }\n\n  /**\n   * Creates a GameServer\n   *\n   * @param  {String} server - Hostname/IP (prepended with a \"ws://\") of game\n   * server.\n   * @param {String} playerHash - Unique Hash that represents the player.\n   */\n  constructor(server, playerHash){\n    super()\n    this._server = server;\n    this._playerHash = playerHash;\n\n    /**\n      * Flag to check if server is connected\n      * @type {Boolean}\n      */\n    this.connected = false;\n\n  }\n\n  /**\n   * Connect to the Game Server\n   * @emits {\"connect\"} - connected to the Game Server\n   * @emits {\"error\"} - error while (or after) connecting to the Game Server\n   * @emits {\"disconnect\"} - disconnected from the Game Server\n   */\n  connect(){\n    this._ws = new WebSocket(this._server + \"/\" + this._playerHash)\n    this._ws.binaryType = \"arraybuffer\";\n    this._ws.onopen = (event) => {\n      this.connected = true;\n      this.emitEvent(\"connect\");\n    }\n\n    this._ws.onmessage = (message) => {\n      Promise.resolve(message)\n      .then(data => data.json())\n      .then(setup_data => this.emitEvent(\"setup_data\", [setup_data])) // TODO: emit message action as event\n      .catch(err => this.emitEvent(\"error\"))\n    }\n\n    this._ws.onerror = () => {\n      this.emitEvent(\"error\");\n    }\n\n    this._ws.onclose = () => {\n      this.connected = false;\n      this.emitEvent(\"disconnect\")\n    }\n  }\n\n  /**\n   * Send a plain text message to the Game Server.\n   * You should almost certainly never have to use this publically.\n   *\n   * @param {String} message - Message to send.\n   */\n  _send(message){\n    this._ws.send(message)\n  }\n\n  /**\n   * Generate protocol prefix from protocol Array.\n   *\n   * Convert array of ASCII indices to a string with the respective ASCII values.\n   *\n   * @param {Array} protocol - ASCII table indices.\n   * @return {String} the rotocol prefix string.\n   */\n  getProtocolString(protocol){\n    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), \"\")\n  }\n\n  /**\n   * Dispatch an action to the GameServer\n   *\n   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.\n   */\n  dispatch(action){\n    switch (action.type){\n      case this.Constants.GET_EVERYTHING:\n        this._send(this.getProtocolString([0, 0, 0, 1]))\n      break;\n      default:\n      break;\n\n    }\n  }\n}\n\nexport default GameServer\n"
   },
   {
-    "__docId__": 24,
+    "__docId__": 26,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -559,7 +608,7 @@
     ]
   },
   {
-    "__docId__": 25,
+    "__docId__": 27,
     "kind": "get",
     "static": true,
     "variation": null,
@@ -586,7 +635,7 @@
     "generator": false
   },
   {
-    "__docId__": 26,
+    "__docId__": 28,
     "kind": "get",
     "static": true,
     "variation": null,
@@ -610,7 +659,7 @@
     "generator": false
   },
   {
-    "__docId__": 27,
+    "__docId__": 29,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -645,7 +694,7 @@
     "generator": false
   },
   {
-    "__docId__": 28,
+    "__docId__": 30,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -663,7 +712,7 @@
     }
   },
   {
-    "__docId__": 29,
+    "__docId__": 31,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -681,7 +730,7 @@
     }
   },
   {
-    "__docId__": 30,
+    "__docId__": 32,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -701,7 +750,7 @@
     }
   },
   {
-    "__docId__": 31,
+    "__docId__": 33,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -735,7 +784,7 @@
     "generator": false
   },
   {
-    "__docId__": 32,
+    "__docId__": 34,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -753,7 +802,7 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 35,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -771,7 +820,7 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 36,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -789,13 +838,13 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 37,
     "kind": "method",
     "static": false,
     "variation": null,
-    "name": "send",
+    "name": "_send",
     "memberof": "src/core/GameServer.js~GameServer",
-    "longname": "src/core/GameServer.js~GameServer#send",
+    "longname": "src/core/GameServer.js~GameServer#_send",
     "access": null,
     "description": "Send a plain text message to the Game Server.\nYou should almost certainly never have to use this publically.",
     "lineNumber": 99,
@@ -814,7 +863,7 @@
     "generator": false
   },
   {
-    "__docId__": 36,
+    "__docId__": 38,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -847,7 +896,7 @@
     "generator": false
   },
   {
-    "__docId__": 37,
+    "__docId__": 39,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -872,7 +921,7 @@
     "generator": false
   },
   {
-    "__docId__": 38,
+    "__docId__": 40,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -885,7 +934,7 @@
     "content": "window.PIXI = require('phaser/build/custom/pixi')\nwindow.p2 = require('phaser/build/custom/p2')\nwindow.Phaser = require('phaser/build/custom/phaser-split')\nrequire(\"./../../plugins/phaser-plugin-isometric.js\")\n"
   },
   {
-    "__docId__": 39,
+    "__docId__": 41,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -895,57 +944,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import { STAGE_WIDTH, STAGE_HEIGHT } from './config.js'\n\nimport Tile from './Components/Tile.js'\nimport Map from './Components/Map.js'\n\nvar game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);\nvar Woobloo = function (game) { };\nWoobloo.Boot = function (game) { };\n\nvar cursorPos, cursor, arrowKeys, infoPanel, hud;\n\nWoobloo.Boot.prototype =\n{\n    init: function(setup_data){\n\n      if(setup_data == undefined){\n        this._players = [];\n        this._map = Map.createGrassMap();\n      } else {\n        const {Players, Map} = setup_data;\n        this._players = Players;\n        this._map = Map;\n      }\n\n      this._world_width = this._map.width * Tile.SIDE * 1.9;\n      this._world_height = this._map.height * Tile.SIDE;\n    },\n\n    getRandomInt: function(min, max) {\n      return Math.floor(Math.random() * (max - min)) + min;\n    },\n\n    preload: function () {\n        // Add and enable the isometric plug-in.\n        game.plugins.add(new Phaser.Plugin.Isometric(game));\n        // This is used to set a game canvas-based offset for the 0, 0, 0 isometric coordinate - by default\n        // this point would be at screen coordinates 0, 0 (top left) which is usually undesirable.\n        game.iso.anchor.setTo(0.5, 0.04);\n\n        game.time.advancedTiming = true;\n\n        game.load.image(\"tile_info_bg\", \"images/tile_info.png\");\n        this._map.preload(game);\n    },\n\n    renderHUD: function() {\n      hud = game.add.group();\n      infoPanel = game.add.text(STAGE_WIDTH - 200, STAGE_HEIGHT - 50, \"Test HUD\");\n      // hud.addChild(game.add.rectangle(STAGE_WIDTH - 100, STAGE_HEIGHT - 200, 100, 200));\n      hud.addChild(infoPanel);\n\n      hud.fixedToCamera = true;\n\n      // game.add.image(0, 0, \"grass\")\n    },\n    create: function () {\n\n        game.world.setBounds(0, 0, this._world_width, this._world_height);\n        game.camera.x = (this._world_width)/2 - STAGE_WIDTH/2;\n        game.camera.y = (this._world_height)/2 - STAGE_HEIGHT/2;\n\n        this._map.render(game);\n\n        // Provide a 3D position for the cursor\n        cursorPos = new Phaser.Plugin.Isometric.Point3();\n\n        arrowKeys = game.input.keyboard.createCursorKeys();\n\n        this.renderHUD();\n    },\n    update: function () {\n        // Update the cursor position.\n        game.iso.unproject(game.input.activePointer.position, cursorPos);\n        this._map.update(game, cursorPos)\n\n        if (arrowKeys.up.isDown)\n         {\n             game.camera.y -= 4;\n         }\n         else if (arrowKeys.down.isDown)\n         {\n             game.camera.y += 4;\n         }\n\n         if (arrowKeys.left.isDown)\n         {\n             game.camera.x -= 4;\n         }\n         else if (arrowKeys.right.isDown)\n         {\n             game.camera.x += 4;\n         }\n\n         if(game.input.mousePointer.x <= STAGE_WIDTH*0.02 ){\n            game.camera.x -= 8;\n         } else if (game.input.mousePointer.x >= STAGE_WIDTH*0.98) {\n            game.camera.x += 8;\n         }\n\n         if(game.input.mousePointer.y <= STAGE_HEIGHT*0.02 ){\n            game.camera.y -= 8;\n         } else if (game.input.mousePointer.y >= STAGE_HEIGHT*0.98) {\n            game.camera.y += 8;\n         }\n    },\n    render: function () {\n        game.debug.text(`FPS: ${game.time.fps}` || '--', 4, 20, \"#bbb\");\n        // game.debug.cameraInfo(game.camera, 32, 32);\n    }\n};\n\ngame.state.add('Boot', Woobloo.Boot);\n\nexport default game;\n"
-  },
-  {
-    "__docId__": 40,
-    "kind": "function",
-    "static": true,
-    "variation": null,
-    "name": "Woobloo",
-    "memberof": "src/game.js",
-    "longname": "src/game.js~Woobloo",
-    "access": null,
-    "export": false,
-    "importPath": "woobloo-frontend/src/game.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 7,
-    "undocument": true,
-    "params": [
-      {
-        "name": "game",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "generator": false
-  },
-  {
-    "__docId__": 41,
-    "kind": "function",
-    "static": true,
-    "variation": null,
-    "name": "Boot",
-    "memberof": "src/game.js",
-    "longname": "src/game.js~Boot",
-    "access": null,
-    "export": false,
-    "importPath": "woobloo-frontend/src/game.js",
-    "importStyle": null,
-    "description": null,
-    "lineNumber": 8,
-    "undocument": true,
-    "params": [
-      {
-        "name": "game",
-        "types": [
-          "*"
-        ]
-      }
-    ],
-    "generator": false
+    "content": "import { STAGE_WIDTH, STAGE_HEIGHT } from './config.js'\n\nimport Game from './GameStates/Game.js'\n\nvar game = new Phaser.Game(STAGE_WIDTH, STAGE_HEIGHT, Phaser.AUTO, 'test', null, true, false);\n\ngame.state.add('Game', Game(game));\nexport default game;\n"
   },
   {
     "__docId__": 42,

@@ -96,7 +96,7 @@ class GameServer extends EventEmitter{
    *
    * @param {String} message - Message to send.
    */
-  send(message){
+  _send(message){
     this._ws.send(message)
   }
 
@@ -120,7 +120,7 @@ class GameServer extends EventEmitter{
   dispatch(action){
     switch (action.type){
       case this.Constants.GET_EVERYTHING:
-        this.send(this.getProtocolString[0, 0, 0, 1])
+        this._send(this.getProtocolString([0, 0, 0, 1]))
       break;
       default:
       break;

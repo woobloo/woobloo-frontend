@@ -1370,8 +1370,8 @@
         "arguments": [
           {
             "type": "Literal",
-            "value": "Boot",
-            "raw": "'Boot'",
+            "value": "Game",
+            "raw": "'Game'",
             "range": [
               530,
               536

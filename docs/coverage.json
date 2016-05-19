@@ -4,8 +4,13 @@
   "actualCount": 24,
   "files": {
     "src/core/GameServer.js": {
-      "expectCount": 9,
-      "actualCount": 9,
+      "expectCount": 8,
+      "actualCount": 8,
+      "undocumentLines": []
+    },
+    "src/GameStates/Game.js": {
+      "expectCount": 1,
+      "actualCount": 1,
       "undocumentLines": []
     },
     "src/Components/Map.js": {

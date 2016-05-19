@@ -1,5 +1,11 @@
 window.esdocSearchIndex = [
   [
+    "woobloo-frontend/src/gamestates/game.js~game",
+    "function/index.html#static-function-Game",
+    "<span>Game</span> <span class=\"search-result-import-path\">woobloo-frontend/src/GameStates/Game.js</span>",
+    "function"
+  ],
+  [
     "woobloo-frontend/src/core/gameserver.js~gameserver",
     "class/src/core/GameServer.js~GameServer.html",
     "<span>GameServer</span> <span class=\"search-result-import-path\">woobloo-frontend/src/core/GameServer.js</span>",
@@ -438,6 +444,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/gamestates/game.js",
+    "file/src/GameStates/Game.js.html",
+    "src/GameStates/Game.js",
+    "file"
+  ],
+  [
     "src/app.js",
     "file/src/app.js.html",
     "src/app.js",
@@ -483,12 +495,6 @@ window.esdocSearchIndex = [
     "src/core/gameserver.js~gameserver#getprotocolstring",
     "class/src/core/GameServer.js~GameServer.html#instance-method-getProtocolString",
     "src/core/GameServer.js~GameServer#getProtocolString",
-    "method"
-  ],
-  [
-    "src/core/gameserver.js~gameserver#send",
-    "class/src/core/GameServer.js~GameServer.html#instance-method-send",
-    "src/core/GameServer.js~GameServer#send",
     "method"
   ],
   [

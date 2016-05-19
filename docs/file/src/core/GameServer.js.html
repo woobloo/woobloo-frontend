@@ -36,6 +36,7 @@
 <li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-STAGE_WIDTH">STAGE_WIDTH</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">Components</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Components/Map.js~Map.html">Map</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/Components/Tile.js~Tile.html">Tile</a></span></span></li>
+<li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">GameStates</div><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Game">Game</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html">GameServer</a></span></span></li>
 </ul>
 </div>
@@ -140,7 +141,7 @@ class GameServer extends EventEmitter{
    *
    * @param {String} message - Message to send.
    */
-  send(message){
+  _send(message){
     this._ws.send(message)
   }
 
@@ -164,7 +165,7 @@ class GameServer extends EventEmitter{
   dispatch(action){
     switch (action.type){
       case this.Constants.GET_EVERYTHING:
-        this.send(this.getProtocolString[0, 0, 0, 1])
+        this._send(this.getProtocolString([0, 0, 0, 1]))
       break;
       default:
       break;

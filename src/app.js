@@ -18,5 +18,5 @@ gs.on('disconnect', () => {
 })
 
 // gs.on('setup_data', setup_data => {
-  Game.state.start('Boot', true, false);
+  Game.state.start('Game', true, false);
 // });
