@@ -477,8 +477,8 @@
     "longname": "src/config.js",
     "access": null,
     "description": null,
-    "lineNumber": 1,
-    "content": "export const STAGE_WIDTH = window.innerWidth;\nexport const STAGE_HEIGHT = window.innerHeight;\n"
+    "lineNumber": 5,
+    "content": "/**\n  * Width of the Stage (Game Window)\n  * @type {Number}\n  */\nexport const STAGE_WIDTH = window.innerWidth;\n\n/**\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  */\nexport const STAGE_HEIGHT = window.innerHeight;\n"
   },
   {
     "__docId__": 21,
@@ -492,13 +492,15 @@
     "export": true,
     "importPath": "woobloo-frontend/src/config.js",
     "importStyle": "{STAGE_WIDTH}",
-    "description": null,
-    "lineNumber": 1,
-    "undocument": true,
+    "description": "Width of the Stage (Game Window)",
+    "lineNumber": 5,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -513,13 +515,15 @@
     "export": true,
     "importPath": "woobloo-frontend/src/config.js",
     "importStyle": "{STAGE_HEIGHT}",
-    "description": null,
-    "lineNumber": 2,
-    "undocument": true,
+    "description": "Height of the Stage (Game Window)",
+    "lineNumber": 11,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Number"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {

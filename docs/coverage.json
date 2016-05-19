@@ -1,7 +1,7 @@
 {
-  "coverage": "91.66%",
+  "coverage": "100%",
   "expectCount": 24,
-  "actualCount": 22,
+  "actualCount": 24,
   "files": {
     "src/core/GameServer.js": {
       "expectCount": 9,
@@ -20,11 +20,8 @@
     },
     "src/config.js": {
       "expectCount": 2,
-      "actualCount": 0,
-      "undocumentLines": [
-        2,
-        1
-      ]
+      "actualCount": 2,
+      "undocumentLines": []
     }
   }
 }

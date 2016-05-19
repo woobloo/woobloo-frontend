@@ -100676,7 +100676,16 @@ _game2.default.state.start('Boot', true, false);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+/**
+  * Width of the Stage (Game Window)
+  * @type {Number}
+  */
 var STAGE_WIDTH = exports.STAGE_WIDTH = window.innerWidth;
+
+/**
+  * Height of the Stage (Game Window)
+  * @type {Number}
+  */
 var STAGE_HEIGHT = exports.STAGE_HEIGHT = window.innerHeight;
 
 },{}],11:[function(require,module,exports){

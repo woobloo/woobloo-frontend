@@ -12,16 +12,16 @@
               "type": "Identifier",
               "name": "STAGE_WIDTH",
               "range": [
-                13,
-                24
+                78,
+                89
               ],
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 5,
                   "column": 13
                 },
                 "end": {
-                  "line": 1,
+                  "line": 5,
                   "column": 24
                 }
               }
@@ -33,16 +33,16 @@
                 "type": "Identifier",
                 "name": "window",
                 "range": [
-                  27,
-                  33
+                  92,
+                  98
                 ],
                 "loc": {
                   "start": {
-                    "line": 1,
+                    "line": 5,
                     "column": 27
                   },
                   "end": {
-                    "line": 1,
+                    "line": 5,
                     "column": 33
                   }
                 }
@@ -51,46 +51,46 @@
                 "type": "Identifier",
                 "name": "innerWidth",
                 "range": [
-                  34,
-                  44
+                  99,
+                  109
                 ],
                 "loc": {
                   "start": {
-                    "line": 1,
+                    "line": 5,
                     "column": 34
                   },
                   "end": {
-                    "line": 1,
+                    "line": 5,
                     "column": 44
                   }
                 }
               },
               "range": [
-                27,
-                44
+                92,
+                109
               ],
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 5,
                   "column": 27
                 },
                 "end": {
-                  "line": 1,
+                  "line": 5,
                   "column": 44
                 }
               }
             },
             "range": [
-              13,
-              44
+              78,
+              109
             ],
             "loc": {
               "start": {
-                "line": 1,
+                "line": 5,
                 "column": 13
               },
               "end": {
-                "line": 1,
+                "line": 5,
                 "column": 44
               }
             }
@@ -98,38 +98,116 @@
         ],
         "kind": "const",
         "range": [
-          7,
-          45
+          72,
+          110
         ],
         "loc": {
           "start": {
-            "line": 1,
+            "line": 5,
             "column": 7
           },
           "end": {
-            "line": 1,
+            "line": 5,
             "column": 45
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n  * Width of the Stage (Game Window)\n  * @type {Number}\n  ",
+            "range": [
+              0,
+              64
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 4,
+                "column": 4
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  ",
+            "range": [
+              112,
+              177
+            ],
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 0
+              },
+              "end": {
+                "line": 10,
+                "column": 4
+              }
+            }
+          }
+        ]
       },
       "specifiers": [],
       "source": null,
       "range": [
-        0,
-        45
+        65,
+        110
       ],
       "loc": {
         "start": {
-          "line": 1,
+          "line": 5,
           "column": 0
         },
         "end": {
-          "line": 1,
+          "line": 5,
           "column": 45
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n  * Width of the Stage (Game Window)\n  * @type {Number}\n  ",
+          "range": [
+            0,
+            64
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 4
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  ",
+          "range": [
+            112,
+            177
+          ],
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 0
+            },
+            "end": {
+              "line": 10,
+              "column": 4
+            }
+          }
+        }
+      ]
     },
     {
       "type": "ExportNamedDeclaration",
@@ -142,16 +220,16 @@
               "type": "Identifier",
               "name": "STAGE_HEIGHT",
               "range": [
-                59,
-                71
+                191,
+                203
               ],
               "loc": {
                 "start": {
-                  "line": 2,
+                  "line": 11,
                   "column": 13
                 },
                 "end": {
-                  "line": 2,
+                  "line": 11,
                   "column": 25
                 }
               }
@@ -163,16 +241,16 @@
                 "type": "Identifier",
                 "name": "window",
                 "range": [
-                  74,
-                  80
+                  206,
+                  212
                 ],
                 "loc": {
                   "start": {
-                    "line": 2,
+                    "line": 11,
                     "column": 28
                   },
                   "end": {
-                    "line": 2,
+                    "line": 11,
                     "column": 34
                   }
                 }
@@ -181,46 +259,46 @@
                 "type": "Identifier",
                 "name": "innerHeight",
                 "range": [
-                  81,
-                  92
+                  213,
+                  224
                 ],
                 "loc": {
                   "start": {
-                    "line": 2,
+                    "line": 11,
                     "column": 35
                   },
                   "end": {
-                    "line": 2,
+                    "line": 11,
                     "column": 46
                   }
                 }
               },
               "range": [
-                74,
-                92
+                206,
+                224
               ],
               "loc": {
                 "start": {
-                  "line": 2,
+                  "line": 11,
                   "column": 28
                 },
                 "end": {
-                  "line": 2,
+                  "line": 11,
                   "column": 46
                 }
               }
             },
             "range": [
-              59,
-              92
+              191,
+              224
             ],
             "loc": {
               "start": {
-                "line": 2,
+                "line": 11,
                 "column": 13
               },
               "end": {
-                "line": 2,
+                "line": 11,
                 "column": 46
               }
             }
@@ -228,54 +306,130 @@
         ],
         "kind": "const",
         "range": [
-          53,
-          93
+          185,
+          225
         ],
         "loc": {
           "start": {
-            "line": 2,
+            "line": 11,
             "column": 7
           },
           "end": {
-            "line": 2,
+            "line": 11,
             "column": 47
           }
         },
-        "leadingComments": [],
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  ",
+            "range": [
+              112,
+              177
+            ],
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 0
+              },
+              "end": {
+                "line": 10,
+                "column": 4
+              }
+            }
+          }
+        ],
         "trailingComments": []
       },
       "specifiers": [],
       "source": null,
       "range": [
-        46,
-        93
+        178,
+        225
       ],
       "loc": {
         "start": {
-          "line": 2,
+          "line": 11,
           "column": 0
         },
         "end": {
-          "line": 2,
+          "line": 11,
           "column": 47
         }
-      }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  ",
+          "range": [
+            112,
+            177
+          ],
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 0
+            },
+            "end": {
+              "line": 10,
+              "column": 4
+            }
+          }
+        }
+      ]
     }
   ],
   "sourceType": "module",
   "range": [
-    0,
-    93
+    65,
+    225
   ],
   "loc": {
     "start": {
-      "line": 1,
+      "line": 5,
       "column": 0
     },
     "end": {
-      "line": 2,
+      "line": 11,
       "column": 47
     }
   },
-  "comments": []
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n  * Width of the Stage (Game Window)\n  * @type {Number}\n  ",
+      "range": [
+        0,
+        64
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 4
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n  * Height of the Stage (Game Window)\n  * @type {Number}\n  ",
+      "range": [
+        112,
+        177
+      ],
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 4
+        }
+      }
+    }
+  ]
 }
