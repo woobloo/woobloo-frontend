@@ -456,18 +456,6 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "src/core/gameserver.js~gameserver#actions",
-    "class/src/core/GameServer.js~GameServer.html#instance-member-Actions",
-    "src/core/GameServer.js~GameServer#Actions",
-    "member"
-  ],
-  [
-    "src/core/gameserver.js~gameserver#constants",
-    "class/src/core/GameServer.js~GameServer.html#instance-member-Constants",
-    "src/core/GameServer.js~GameServer#Constants",
-    "member"
-  ],
-  [
     "src/core/gameserver.js~gameserver#connect",
     "class/src/core/GameServer.js~GameServer.html#instance-method-connect",
     "src/core/GameServer.js~GameServer#connect",
@@ -502,6 +490,18 @@ window.esdocSearchIndex = [
     "class/src/core/GameServer.js~GameServer.html#instance-method-send",
     "src/core/GameServer.js~GameServer#send",
     "method"
+  ],
+  [
+    "src/core/gameserver.js~gameserver.actions",
+    "class/src/core/GameServer.js~GameServer.html#static-get-Actions",
+    "src/core/GameServer.js~GameServer.Actions",
+    "member"
+  ],
+  [
+    "src/core/gameserver.js~gameserver.constants",
+    "class/src/core/GameServer.js~GameServer.html#static-get-Constants",
+    "src/core/GameServer.js~GameServer.Constants",
+    "member"
   ],
   [
     "src/core/setupphaser.js",

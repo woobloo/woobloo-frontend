@@ -533,7 +533,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "\"use strict\";\nimport EventEmitter from 'wolfy87-eventemitter'\n\n/**\n * The GameServer Class is the primary way to communicate with a Game Server.\n * It uses WebSockets to implement bi-directional communication.\n * It extends EventEmitter which means you can subscribe to GameServer events.\n * @extends EventEmitter\n */\nclass GameServer extends EventEmitter{\n  /**\n   * Creates a GameServer\n   *\n   * @param  {string} server - Hostname/IP (prepended with a \"ws://\") of game\n   * server.\n   * @param {string} playerHash - Unique Hash that represents the player.\n   */\n  constructor(server, playerHash){\n    super()\n    this._server = server;\n    this._playerHash = playerHash;\n    this.connected = false;\n\n    this.Constants = {\n      GET_EVERYTHING : \"GET_EVERYTHING\"\n    }\n\n    this.Actions = {\n      getEverything: () => ({type: this.Constants.GET_EVERYTHING})\n    }\n  }\n\n  /**\n   * Connect to the Game Server\n   */\n  connect(){\n    this._ws = new WebSocket(this._server + \"/\" + this._playerHash)\n    this._ws.binaryType = \"arraybuffer\";\n    this._ws.onopen = (event) => {\n      this.connected = true;\n      this.emitEvent(\"connect\");\n    }\n\n    this._ws.onmessage = (message) => {\n      Promise.resolve(message)\n      .then(data => data.json())\n      .then(setup_data => this.emitEvent(\"setup_data\", [setup_data])) // TODO: emit message action as event\n      .catch(err => this.emitEvent(\"error\"))\n    }\n\n    this._ws.onerror = () => {\n      this.emitEvent(\"error\");\n    }\n\n    this._ws.onclose = () => {\n      this.connected = false;\n      this.emitEvent(\"disconnect\")\n    }\n  }\n\n  /**\n   * Send a plain text message to the Game Server.\n   * You should almost certainly never have to use this publically.\n   *\n   * @param {string} message - Message to send.\n   */\n  send(message){\n    this._ws.send(message)\n  }\n\n  /**\n   * Generate protocol prefix from protocol Array.\n   *\n   * Convert array of ASCII indices to a string with the respective ASCII values.\n   *\n   * @param {Array} protocol - ASCII table indices.\n   * @return {string} the rotocol prefix string.\n   */\n  getProtocolString(protocol){\n    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), \"\")\n  }\n\n  /**\n   * Dispatch an action to the GameServer\n   *\n   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.\n   */\n  dispatch(action){\n    switch (action.type){\n      case this.Constants.GET_EVERYTHING:\n        this.send(this.getProtocolString[0, 0, 0, 1])\n      break;\n      default:\n      break;\n\n    }\n  }\n}\n\nexport default GameServer\n"
+    "content": "\"use strict\";\nimport EventEmitter from 'wolfy87-eventemitter'\n\n/**\n * The GameServer Class is the primary way to communicate with a Game Server.\n * It uses WebSockets to implement bi-directional communication.\n * It extends EventEmitter which means you can subscribe to GameServer events.\n * @extends {EventEmitter}\n */\nclass GameServer extends EventEmitter{\n\n  /**\n    * List of all the possible action types.\n    * @const\n    * @type {Object}\n    */\n  static get Constants(){\n    return {\n      GET_EVERYTHING : \"GET_EVERYTHING\"\n    }\n  }\n\n  /**\n  * All the possible actions that can be requested of the Game Server.\n  *\n  * These functions return an action object that should be passed as an\n  * argument to {@link dispatch} for the action to be exectued.\n  *\n  * This resembles the redux architecture.\n  * @type {Object}\n  * @example\n  * GameServer gs = new GameServer(...);\n  * gs.connect();\n  * gs.dispatch(gs.Actions.getEverything());\n  */\n  static get Actions(){\n    return {\n      getEverything: () => ({type: this.Constants.GET_EVERYTHING})\n    }\n  }\n\n  /**\n   * Creates a GameServer\n   *\n   * @param  {String} server - Hostname/IP (prepended with a \"ws://\") of game\n   * server.\n   * @param {String} playerHash - Unique Hash that represents the player.\n   */\n  constructor(server, playerHash){\n    super()\n    this._server = server;\n    this._playerHash = playerHash;\n\n    /**\n      * Flag to check if server is connected\n      * @type {Boolean}\n      */\n    this.connected = false;\n\n  }\n\n  /**\n   * Connect to the Game Server\n   * @emits {\"connect\"} - connected to the Game Server\n   * @emits {\"error\"} - error while (or after) connecting to the Game Server\n   * @emits {\"disconnect\"} - disconnected from the Game Server\n   */\n  connect(){\n    this._ws = new WebSocket(this._server + \"/\" + this._playerHash)\n    this._ws.binaryType = \"arraybuffer\";\n    this._ws.onopen = (event) => {\n      this.connected = true;\n      this.emitEvent(\"connect\");\n    }\n\n    this._ws.onmessage = (message) => {\n      Promise.resolve(message)\n      .then(data => data.json())\n      .then(setup_data => this.emitEvent(\"setup_data\", [setup_data])) // TODO: emit message action as event\n      .catch(err => this.emitEvent(\"error\"))\n    }\n\n    this._ws.onerror = () => {\n      this.emitEvent(\"error\");\n    }\n\n    this._ws.onclose = () => {\n      this.connected = false;\n      this.emitEvent(\"disconnect\")\n    }\n  }\n\n  /**\n   * Send a plain text message to the Game Server.\n   * You should almost certainly never have to use this publically.\n   *\n   * @param {String} message - Message to send.\n   */\n  send(message){\n    this._ws.send(message)\n  }\n\n  /**\n   * Generate protocol prefix from protocol Array.\n   *\n   * Convert array of ASCII indices to a string with the respective ASCII values.\n   *\n   * @param {Array} protocol - ASCII table indices.\n   * @return {String} the rotocol prefix string.\n   */\n  getProtocolString(protocol){\n    return protocol.reduce((string, int) => (string + String.fromCharCode(int)), \"\")\n  }\n\n  /**\n   * Dispatch an action to the GameServer\n   *\n   * @param {Object} action - Server to commit; Obtain this by using one of the GameServer's Action methods.\n   */\n  dispatch(action){\n    switch (action.type){\n      case this.Constants.GET_EVERYTHING:\n        this.send(this.getProtocolString[0, 0, 0, 1])\n      break;\n      default:\n      break;\n\n    }\n  }\n}\n\nexport default GameServer\n"
   },
   {
     "__docId__": 24,
@@ -551,11 +551,62 @@
     "lineNumber": 10,
     "interface": false,
     "extends": [
-      "*"
+      "EventEmitter"
     ]
   },
   {
     "__docId__": 25,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "Constants",
+    "memberof": "src/core/GameServer.js~GameServer",
+    "longname": "src/core/GameServer.js~GameServer.Constants",
+    "access": null,
+    "description": "List of all the possible action types.",
+    "lineNumber": 17,
+    "unknown": [
+      {
+        "tagName": "@const",
+        "tagValue": ""
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 26,
+    "kind": "get",
+    "static": true,
+    "variation": null,
+    "name": "Actions",
+    "memberof": "src/core/GameServer.js~GameServer",
+    "longname": "src/core/GameServer.js~GameServer.Actions",
+    "access": null,
+    "description": "All the possible actions that can be requested of the Game Server.\n\nThese functions return an action object that should be passed as an\nargument to {@link dispatch} for the action to be exectued.\n\nThis resembles the redux architecture.",
+    "examples": [
+      "GameServer gs = new GameServer(...);\ngs.connect();\ngs.dispatch(gs.Actions.getEverything());"
+    ],
+    "lineNumber": 36,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 27,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -564,12 +615,12 @@
     "longname": "src/core/GameServer.js~GameServer#constructor",
     "access": null,
     "description": "Creates a GameServer",
-    "lineNumber": 18,
+    "lineNumber": 49,
     "params": [
       {
         "nullable": null,
         "types": [
-          "string"
+          "String"
         ],
         "spread": false,
         "optional": false,
@@ -579,7 +630,7 @@
       {
         "nullable": null,
         "types": [
-          "string"
+          "String"
         ],
         "spread": false,
         "optional": false,
@@ -590,7 +641,7 @@
     "generator": false
   },
   {
-    "__docId__": 26,
+    "__docId__": 28,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -599,47 +650,11 @@
     "longname": "src/core/GameServer.js~GameServer#_server",
     "access": null,
     "description": null,
-    "lineNumber": 20,
+    "lineNumber": 51,
     "undocument": true,
     "type": {
       "types": [
         "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 27,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_playerHash",
-    "memberof": "src/core/GameServer.js~GameServer",
-    "longname": "src/core/GameServer.js~GameServer#_playerHash",
-    "access": null,
-    "description": null,
-    "lineNumber": 21,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 28,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "connected",
-    "memberof": "src/core/GameServer.js~GameServer",
-    "longname": "src/core/GameServer.js~GameServer#connected",
-    "access": null,
-    "description": null,
-    "lineNumber": 22,
-    "undocument": true,
-    "type": {
-      "types": [
-        "boolean"
       ]
     }
   },
@@ -648,12 +663,12 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "Constants",
+    "name": "_playerHash",
     "memberof": "src/core/GameServer.js~GameServer",
-    "longname": "src/core/GameServer.js~GameServer#Constants",
+    "longname": "src/core/GameServer.js~GameServer#_playerHash",
     "access": null,
     "description": null,
-    "lineNumber": 24,
+    "lineNumber": 52,
     "undocument": true,
     "type": {
       "types": [
@@ -666,17 +681,19 @@
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "Actions",
+    "name": "connected",
     "memberof": "src/core/GameServer.js~GameServer",
-    "longname": "src/core/GameServer.js~GameServer#Actions",
+    "longname": "src/core/GameServer.js~GameServer#connected",
     "access": null,
-    "description": null,
-    "lineNumber": 28,
-    "undocument": true,
+    "description": "Flag to check if server is connected",
+    "lineNumber": 58,
     "type": {
+      "nullable": null,
       "types": [
-        "*"
-      ]
+        "Boolean"
+      ],
+      "spread": false,
+      "description": null
     }
   },
   {
@@ -689,8 +706,28 @@
     "longname": "src/core/GameServer.js~GameServer#connect",
     "access": null,
     "description": "Connect to the Game Server",
-    "lineNumber": 36,
+    "lineNumber": 68,
     "params": [],
+    "emits": [
+      {
+        "types": [
+          "\"connect\""
+        ],
+        "description": "connected to the Game Server"
+      },
+      {
+        "types": [
+          "\"error\""
+        ],
+        "description": "error while (or after) connecting to the Game Server"
+      },
+      {
+        "types": [
+          "\"disconnect\""
+        ],
+        "description": "disconnected from the Game Server"
+      }
+    ],
     "generator": false
   },
   {
@@ -703,7 +740,7 @@
     "longname": "src/core/GameServer.js~GameServer#_ws",
     "access": null,
     "description": null,
-    "lineNumber": 37,
+    "lineNumber": 69,
     "undocument": true,
     "type": {
       "types": [
@@ -721,7 +758,7 @@
     "longname": "src/core/GameServer.js~GameServer#connected",
     "access": null,
     "description": null,
-    "lineNumber": 40,
+    "lineNumber": 72,
     "undocument": true,
     "type": {
       "types": [
@@ -739,7 +776,7 @@
     "longname": "src/core/GameServer.js~GameServer#connected",
     "access": null,
     "description": null,
-    "lineNumber": 56,
+    "lineNumber": 88,
     "undocument": true,
     "type": {
       "types": [
@@ -757,12 +794,12 @@
     "longname": "src/core/GameServer.js~GameServer#send",
     "access": null,
     "description": "Send a plain text message to the Game Server.\nYou should almost certainly never have to use this publically.",
-    "lineNumber": 67,
+    "lineNumber": 99,
     "params": [
       {
         "nullable": null,
         "types": [
-          "string"
+          "String"
         ],
         "spread": false,
         "optional": false,
@@ -782,7 +819,7 @@
     "longname": "src/core/GameServer.js~GameServer#getProtocolString",
     "access": null,
     "description": "Generate protocol prefix from protocol Array.\n\nConvert array of ASCII indices to a string with the respective ASCII values.",
-    "lineNumber": 79,
+    "lineNumber": 111,
     "params": [
       {
         "nullable": null,
@@ -798,7 +835,7 @@
     "return": {
       "nullable": null,
       "types": [
-        "string"
+        "String"
       ],
       "spread": false,
       "description": "the rotocol prefix string."
@@ -815,7 +852,7 @@
     "longname": "src/core/GameServer.js~GameServer#dispatch",
     "access": null,
     "description": "Dispatch an action to the GameServer",
-    "lineNumber": 88,
+    "lineNumber": 120,
     "params": [
       {
         "nullable": null,

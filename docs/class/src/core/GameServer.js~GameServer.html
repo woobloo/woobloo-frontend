@@ -58,7 +58,7 @@
 
   
   
-  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>*</span> &#x2192; GameServer</div></div>
+  <div class="flat-list" data-ice="extendsChain"><h4>Extends:</h4><div><span>EventEmitter</span> &#x2192; GameServer</div></div>
   
   
   
@@ -82,7 +82,65 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
   
 </div>
 
-
+<div data-ice="staticMemberSummary"><h2>Static Member Summary</h2><table class="summary" data-ice="summary">
+  <thead><tr><td data-ice="title" colspan="3">Static Public Members</td></tr></thead>
+  <tbody>
+  
+  <tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      <span data-ice="static">static</span>
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#static-get-Actions">Actions</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>All the possible actions that can be requested of the Game Server.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+<tr data-ice="target">
+    <td>
+      <span class="access" data-ice="access">public</span>
+      <span data-ice="static">static</span>
+      <span class="kind" data-ice="kind">get</span>
+      
+      <span class="override" data-ice="override"></span>
+    </td>
+    <td>
+      <div>
+        <p>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#static-get-Constants">Constants</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+        </p>
+      </div>
+      <div>
+        
+        
+        <div data-ice="description"><p>List of all the possible action types.</p>
+</div>
+      </div>
+    </td>
+    <td>
+      
+      
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
 
 <div data-ice="constructorSummary"><h2>Constructor Summary</h2><table class="summary" data-ice="summary">
   <thead><tr><td data-ice="title" colspan="3">Public Constructor</td></tr></thead>
@@ -99,7 +157,7 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(server: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, playerHash: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(server: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, playerHash: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
@@ -132,63 +190,14 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-member-Actions">Actions</a></span></span><span data-ice="signature">: <span>*</span></span>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-member-connected">connected</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
         </p>
       </div>
       <div>
         
         
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-member-Constants">Constants</a></span></span><span data-ice="signature">: <span>*</span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
-      </div>
-    </td>
-    <td>
-      
-      
-    </td>
-  </tr>
-<tr data-ice="target">
-    <td>
-      <span class="access" data-ice="access">public</span>
-      
-      
-      
-      <span class="override" data-ice="override"></span>
-    </td>
-    <td>
-      <div>
-        <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-member-connected">connected</a></span></span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
-        </p>
-      </div>
-      <div>
-        
-        
-        
+        <div data-ice="description"><p>Flag to check if server is connected</p>
+</div>
       </div>
     </td>
     <td>
@@ -266,7 +275,7 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-method-getProtocolString">getProtocolString</a></span></span><span data-ice="signature">(protocol: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-method-getProtocolString">getProtocolString</a></span></span><span data-ice="signature">(protocol: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
         </p>
       </div>
       <div>
@@ -292,7 +301,7 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-method-send">send</a></span></span><span data-ice="signature">(message: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+           <span data-ice="name"><span><a href="class/src/core/GameServer.js~GameServer.html#instance-method-send">send</a></span></span><span data-ice="signature">(message: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
         </p>
       </div>
       <div>
@@ -313,7 +322,103 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
 
 
 
+<div data-ice="staticMemberDetails"><h2 data-ice="title">Static Public Members</h2>
 
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-get-Actions">
+    <span class="access" data-ice="access">public</span>
+    <span data-ice="static">static</span>
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    <span data-ice="name">Actions</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber36">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>All the possible actions that can be requested of the Game Server.</p>
+<p>These functions return an action object that should be passed as an
+argument to <span><a href="class/src/core/GameServer.js~GameServer.html#instance-method-dispatch">dispatch</a></span> for the action to be exectued.</p>
+<p>This resembles the redux architecture.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  <div data-ice="example">
+    <h4>Example:</h4>
+    
+  <div class="example-doc" data-ice="exampleDoc">
+      
+      <pre class="prettyprint source-code"><code data-ice="exampleCode">GameServer gs = new GameServer(...);
+gs.connect();
+gs.dispatch(gs.Actions.getEverything());</code></pre>
+    </div>
+</div>
+
+  
+
+  
+  
+</div>
+<div class="detail" data-ice="detail">
+  <h3 data-ice="anchor" id="static-get-Constants">
+    <span class="access" data-ice="access">public</span>
+    <span data-ice="static">static</span>
+    <span class="kind" data-ice="kind">get</span>
+    
+    
+    <span data-ice="name">Constants</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">Object</a></span></span>
+    <span class="right-info">
+      
+      
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber17">source</a></span></span>
+    </span>
+  </h3>
+
+  
+  
+  
+  <div data-ice="description"><p>List of all the possible action types.</p>
+</div>
+
+  
+
+  <div data-ice="properties">
+</div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+</div>
+</div>
 
 <div data-ice="constructorDetails"><h2 data-ice="title">Public Constructors</h2>
 
@@ -324,11 +429,11 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(server: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>, playerHash: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(server: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>, playerHash: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber18">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber49">source</a></span></span>
     </span>
   </h3>
 
@@ -350,7 +455,7 @@ It extends EventEmitter which means you can subscribe to GameServer events.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">server</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Hostname/IP (prepended with a &quot;ws://&quot;) of game
 server.</p>
@@ -358,7 +463,7 @@ server.</p>
     </tr>
 <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">playerHash</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Unique Hash that represents the player.</p>
 </td>
@@ -387,104 +492,25 @@ server.</p>
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-Actions">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">Actions</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber28">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-member-Constants">
-    <span class="access" data-ice="access">public</span>
-    
-    
-    
-    
-    <span data-ice="name">Constants</span><span data-ice="signature">: <span>*</span></span>
-    <span class="right-info">
-      
-      
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber24">source</a></span></span>
-    </span>
-  </h3>
-
-  
-  
-  
-  
-
-  
-
-  <div data-ice="properties">
-</div>
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-  
-</div>
-<div class="detail" data-ice="detail">
   <h3 data-ice="anchor" id="instance-member-connected">
     <span class="access" data-ice="access">public</span>
     
     
     
     
-    <span data-ice="name">connected</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">boolean</a></span></span>
+    <span data-ice="name">connected</span><span data-ice="signature">: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean">Boolean</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber22">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber58">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  
+  <div data-ice="description"><p>Flag to check if server is connected</p>
+</div>
 
   
 
@@ -520,7 +546,7 @@ server.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber36">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber68">source</a></span></span>
     </span>
   </h3>
 
@@ -537,7 +563,29 @@ server.</p>
 
   
 
-  
+  <div data-ice="emitWrap">
+    <h4>Emit:</h4>
+    <table>
+      <tbody>
+      
+      <tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>&quot;connect&quot;</span></p></td>
+        <td data-ice="emitDesc"><p>connected to the Game Server</p>
+</td>
+      </tr>
+<tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>&quot;error&quot;</span></p></td>
+        <td data-ice="emitDesc"><p>error while (or after) connecting to the Game Server</p>
+</td>
+      </tr>
+<tr class="emit" data-ice="emit">
+        <td><p data-ice="emitName"><span>&quot;disconnect&quot;</span></p></td>
+        <td data-ice="emitDesc"><p>disconnected from the Game Server</p>
+</td>
+      </tr>
+</tbody>
+    </table>
+  </div>
 
   
 
@@ -561,7 +609,7 @@ server.</p>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber88">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber120">source</a></span></span>
     </span>
   </h3>
 
@@ -615,11 +663,11 @@ server.</p>
     
     
     
-    <span data-ice="name">getProtocolString</span><span data-ice="signature">(protocol: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></span>
+    <span data-ice="name">getProtocolString</span><span data-ice="signature">(protocol: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></span>): <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber79">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber111">source</a></span></span>
     </span>
   </h3>
 
@@ -656,7 +704,7 @@ server.</p>
     <h4>Return:</h4>
     <table>
       <tr>
-        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+        <td class="return-type" data-ice="returnType"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
         <td class="return-desc" data-ice="returnDescription"><p>the rotocol prefix string.</p>
 </td>
       </tr>
@@ -685,11 +733,11 @@ server.</p>
     
     
     
-    <span data-ice="name">send</span><span data-ice="signature">(message: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span>)</span>
+    <span data-ice="name">send</span><span data-ice="signature">(message: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span>)</span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber67">source</a></span></span>
+      <span data-ice="source"><span><a href="file/src/core/GameServer.js.html#lineNumber99">source</a></span></span>
     </span>
   </h3>
 
@@ -712,7 +760,7 @@ You should almost certainly never have to use this publically.</p>
     
     <tr data-ice="property" data-depth="0">
       <td data-ice="name" data-depth="0">message</td>
-      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">string</a></span></td>
+      <td data-ice="type"><span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String">String</a></span></td>
       <td data-ice="appendix"></td>
       <td data-ice="description"><p>Message to send.</p>
 </td>

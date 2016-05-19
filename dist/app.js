@@ -100704,19 +100704,62 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * The GameServer Class is the primary way to communicate with a Game Server.
  * It uses WebSockets to implement bi-directional communication.
  * It extends EventEmitter which means you can subscribe to GameServer events.
- * @extends EventEmitter
+ * @extends {EventEmitter}
  */
 
 var GameServer = function (_EventEmitter) {
   _inherits(GameServer, _EventEmitter);
 
-  /**
-   * Creates a GameServer
-   *
-   * @param  {string} server - Hostname/IP (prepended with a "ws://") of game
-   * server.
-   * @param {string} playerHash - Unique Hash that represents the player.
-   */
+  _createClass(GameServer, null, [{
+    key: "Constants",
+
+
+    /**
+      * List of all the possible action types.
+      * @const
+      * @type {Object}
+      */
+    get: function get() {
+      return {
+        GET_EVERYTHING: "GET_EVERYTHING"
+      };
+    }
+
+    /**
+    * All the possible actions that can be requested of the Game Server.
+    *
+    * These functions return an action object that should be passed as an
+    * argument to {@link dispatch} for the action to be exectued.
+    *
+    * This resembles the redux architecture.
+    * @type {Object}
+    * @example
+    * GameServer gs = new GameServer(...);
+    * gs.connect();
+    * gs.dispatch(gs.Actions.getEverything());
+    */
+
+  }, {
+    key: "Actions",
+    get: function get() {
+      var _this2 = this;
+
+      return {
+        getEverything: function getEverything() {
+          return { type: _this2.Constants.GET_EVERYTHING };
+        }
+      };
+    }
+
+    /**
+     * Creates a GameServer
+     *
+     * @param  {String} server - Hostname/IP (prepended with a "ws://") of game
+     * server.
+     * @param {String} playerHash - Unique Hash that represents the player.
+     */
+
+  }]);
 
   function GameServer(server, playerHash) {
     _classCallCheck(this, GameServer);
@@ -100725,55 +100768,54 @@ var GameServer = function (_EventEmitter) {
 
     _this._server = server;
     _this._playerHash = playerHash;
+
+    /**
+      * Flag to check if server is connected
+      * @type {Boolean}
+      */
     _this.connected = false;
 
-    _this.Constants = {
-      GET_EVERYTHING: "GET_EVERYTHING"
-    };
-
-    _this.Actions = {
-      getEverything: function getEverything() {
-        return { type: _this.Constants.GET_EVERYTHING };
-      }
-    };
     return _this;
   }
 
   /**
    * Connect to the Game Server
+   * @emits {"connect"} - connected to the Game Server
+   * @emits {"error"} - error while (or after) connecting to the Game Server
+   * @emits {"disconnect"} - disconnected from the Game Server
    */
 
 
   _createClass(GameServer, [{
     key: "connect",
     value: function connect() {
-      var _this2 = this;
+      var _this3 = this;
 
       this._ws = new WebSocket(this._server + "/" + this._playerHash);
       this._ws.binaryType = "arraybuffer";
       this._ws.onopen = function (event) {
-        _this2.connected = true;
-        _this2.emitEvent("connect");
+        _this3.connected = true;
+        _this3.emitEvent("connect");
       };
 
       this._ws.onmessage = function (message) {
         Promise.resolve(message).then(function (data) {
           return data.json();
         }).then(function (setup_data) {
-          return _this2.emitEvent("setup_data", [setup_data]);
+          return _this3.emitEvent("setup_data", [setup_data]);
         }) // TODO: emit message action as event
         .catch(function (err) {
-          return _this2.emitEvent("error");
+          return _this3.emitEvent("error");
         });
       };
 
       this._ws.onerror = function () {
-        _this2.emitEvent("error");
+        _this3.emitEvent("error");
       };
 
       this._ws.onclose = function () {
-        _this2.connected = false;
-        _this2.emitEvent("disconnect");
+        _this3.connected = false;
+        _this3.emitEvent("disconnect");
       };
     }
 
@@ -100781,7 +100823,7 @@ var GameServer = function (_EventEmitter) {
      * Send a plain text message to the Game Server.
      * You should almost certainly never have to use this publically.
      *
-     * @param {string} message - Message to send.
+     * @param {String} message - Message to send.
      */
 
   }, {
@@ -100796,7 +100838,7 @@ var GameServer = function (_EventEmitter) {
      * Convert array of ASCII indices to a string with the respective ASCII values.
      *
      * @param {Array} protocol - ASCII table indices.
-     * @return {string} the rotocol prefix string.
+     * @return {String} the rotocol prefix string.
      */
 
   }, {
