@@ -100508,7 +100508,8 @@ var Map = function () {
         // If it does, do a little animation and tint change.
         if (!tile.selected && inBounds) {
           tile.selected = true;
-          tile.tint = 0x86bfda;
+          // tile.tint = 0x86bfda;
+          tile.tint = 0xa2a2a2;
           // console.log(tile);
 
           tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg");
