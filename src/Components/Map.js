@@ -74,7 +74,11 @@ class Map {
               tile.tint = 0xa2a2a2;
               // console.log(tile);
 
-              tile.infoPanel = game.add.image(tile.x, tile.y, "tile_info_bg")
+              delete tile.infoPanel
+              tile.infoPanel = game.add.group();
+              tile.infoPanel.addChild(game.add.image(tile.x, tile.y, "tile_info_bg"))
+              tile.infoPanel.addChild(game.add.text(tile.x, tile.y, "Tile Info"))
+
               tile.infoPanel.anchor = new Phaser.Point(0, 1);
               tile.infoPanel.visible = false
               setTimeout(() => {
@@ -92,7 +96,7 @@ class Map {
               tile.tint = 0xffffff;
 
               if(tile.infoPanel)
-                tile.infoPanel.kill()
+                tile.infoPanel.visible = false;
 
               // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
           }
