@@ -48,7 +48,6 @@ import Game from &apos;./game.js&apos;
 import GameServer from &apos;./core/GameServer.js&apos;
 
 const gs = new GameServer(&apos;ws://159.203.237.59:8080&apos;, &quot;123e4567-e89b-12d3-a456-426655440000&quot;);
-// gs.connect();
 
 gs.on(&apos;connected&apos;, () =&gt; {
   gs.dispatch(gs.Actions.getEverything());
@@ -62,9 +61,12 @@ gs.on(&apos;disconnect&apos;, () =&gt; {
   console.log(&quot;Server Disconnected&quot;);
 })
 
-// gs.on(&apos;setup_data&apos;, setup_data =&gt; {
-  Game.state.start(&apos;Game&apos;, true, false);
-// });
+gs.on(&apos;setup_data&apos;, setup_data =&gt; {
+  Game.state.start(&apos;Game&apos;, true, false, setup_data);
+});
+
+gs.mockConnect();
+// gs.connect();
 </code></pre>
 
 </div>

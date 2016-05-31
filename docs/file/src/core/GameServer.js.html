@@ -136,6 +136,14 @@ class GameServer extends EventEmitter{
   }
 
   /**
+    * Pretend that the server has connected (for offline testing purposes).
+    * @emits {&quot;setup_data&quot;} - Emits a setup_data event with no data.
+    */
+  mockConnect(){
+    this.emitEvent(&quot;setup_data&quot;, [undefined])
+  }
+
+  /**
    * Send a plain text message to the Game Server.
    * You should almost certainly never have to use this publically.
    *

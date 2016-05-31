@@ -89,16 +89,12 @@ class Map {
       * @param {Phaser.Game} game - The Phaser game instance
       */
       render(game){
-        // Create a group for our tiles.
+        // A group for the Game tiles.
         this._isoGroup = game.add.group();
 
         for (var xx = 0; xx &lt; this.height; xx ++) {
             for (var yy = 0; yy &lt; this.width; yy ++) {
-                // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                // The last parameter is the group you want to add it to (just like game.add.sprite)
-                let tileData = this._map[xx][yy];
-                let tile = game.add.isoSprite(tileData.pos.x*Tile.SIDE, tileData.pos.y*Tile.SIDE, 0, &quot;grass&quot;, 0, this._isoGroup);
-                tile.anchor.set(0.5, 0);
+                this._map[xx][yy].render(game, this._isoGroup);
             }
         }
       }
@@ -115,10 +111,15 @@ class Map {
           // If it does, do a little animation and tint change.
           if (!tile.selected &amp;&amp; inBounds) {
               tile.selected = true;
-              tile.tint = 0x86bfda;
+              // tile.tint = 0x86bfda;
+              tile.tint = 0xa2a2a2;
               // console.log(tile);
 
-              tile.infoPanel = game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;)
+              delete tile.infoPanel
+              tile.infoPanel = game.add.group();
+              tile.infoPanel.addChild(game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;))
+              tile.infoPanel.addChild(game.add.text(tile.x, tile.y, &quot;Tile Info&quot;))
+
               tile.infoPanel.anchor = new Phaser.Point(0, 1);
               tile.infoPanel.visible = false
               setTimeout(() =&gt; {
@@ -136,7 +137,7 @@ class Map {
               tile.tint = 0xffffff;
 
               if(tile.infoPanel)
-                tile.infoPanel.kill()
+                tile.infoPanel.visible = false;
 
               // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
           }

@@ -100484,8 +100484,6 @@ var Map = function () {
 
       for (var xx = 0; xx < this.height; xx++) {
         for (var yy = 0; yy < this.width; yy++) {
-          // Create a tile using the new game.add.isoSprite factory method at the specified position.
-          // The last parameter is the group you want to add it to (just like game.add.sprite)
           this._map[xx][yy].render(game, this._isoGroup);
         }
       }
@@ -100797,7 +100795,6 @@ var _GameServer2 = _interopRequireDefault(_GameServer);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var gs = new _GameServer2.default('ws://159.203.237.59:8080', "123e4567-e89b-12d3-a456-426655440000");
-// gs.connect();
 
 gs.on('connected', function () {
   gs.dispatch(gs.Actions.getEverything());
@@ -100811,9 +100808,12 @@ gs.on('disconnect', function () {
   console.log("Server Disconnected");
 });
 
-// gs.on('setup_data', setup_data => {
-_game2.default.state.start('Game', true, false);
-// });
+gs.on('setup_data', function (setup_data) {
+  _game2.default.state.start('Game', true, false, setup_data);
+});
+
+gs.mockConnect();
+// gs.connect();
 
 },{"./core/GameServer.js":12,"./core/SetupPhaser.js":13,"./game.js":14}],11:[function(require,module,exports){
 "use strict";
@@ -100971,6 +100971,17 @@ var GameServer = function (_EventEmitter) {
         _this3.connected = false;
         _this3.emitEvent("disconnect");
       };
+    }
+
+    /**
+      * Pretend that the server has connected (for offline testing purposes).
+      * @emits {"setup_data"} - Emits a setup_data event with no data.
+      */
+
+  }, {
+    key: "mockConnect",
+    value: function mockConnect() {
+      this.emitEvent("setup_data", [undefined]);
     }
 
     /**

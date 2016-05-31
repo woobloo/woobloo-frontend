@@ -49,8 +49,6 @@ class Map {
 
         for (var xx = 0; xx < this.height; xx ++) {
             for (var yy = 0; yy < this.width; yy ++) {
-                // Create a tile using the new game.add.isoSprite factory method at the specified position.
-                // The last parameter is the group you want to add it to (just like game.add.sprite)
                 this._map[xx][yy].render(game, this._isoGroup);
             }
         }

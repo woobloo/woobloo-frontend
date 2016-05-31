@@ -83,6 +83,16 @@ export default class Tile {
     this.pos = pos
   }
 
+  /**
+    * Render the tile into the scene.
+    * @param {Phaser.Game} game - The Phaser Game Object.
+    * @param {Object} group - A Phaser group to store the tiles.
+    */
+  render(game, group){
+    let tile = game.add.isoSprite(this.pos.x*Tile.SIDE, this.pos.y*Tile.SIDE, 0, &quot;grass&quot;, 0, group);
+    tile.anchor.set(0.5, 0);
+  }
+
 }
 </code></pre>
 

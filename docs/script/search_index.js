@@ -432,6 +432,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/components/tile.js~tile#render",
+    "class/src/Components/Tile.js~Tile.html#instance-method-render",
+    "src/Components/Tile.js~Tile#render",
+    "method"
+  ],
+  [
     "src/components/tile.js~tile#type",
     "class/src/Components/Tile.js~Tile.html#instance-member-type",
     "src/Components/Tile.js~Tile#type",
@@ -495,6 +501,12 @@ window.esdocSearchIndex = [
     "src/core/gameserver.js~gameserver#getprotocolstring",
     "class/src/core/GameServer.js~GameServer.html#instance-method-getProtocolString",
     "src/core/GameServer.js~GameServer#getProtocolString",
+    "method"
+  ],
+  [
+    "src/core/gameserver.js~gameserver#mockconnect",
+    "class/src/core/GameServer.js~GameServer.html#instance-method-mockConnect",
+    "src/core/GameServer.js~GameServer#mockConnect",
     "method"
   ],
   [
