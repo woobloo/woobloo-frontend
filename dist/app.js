@@ -100479,16 +100479,14 @@ var Map = function () {
   }, {
     key: "render",
     value: function render(game) {
-      // Create a group for our tiles.
+      // A group for the Game tiles.
       this._isoGroup = game.add.group();
 
       for (var xx = 0; xx < this.height; xx++) {
         for (var yy = 0; yy < this.width; yy++) {
           // Create a tile using the new game.add.isoSprite factory method at the specified position.
           // The last parameter is the group you want to add it to (just like game.add.sprite)
-          var tileData = this._map[xx][yy];
-          var tile = game.add.isoSprite(tileData.pos.x * _Tile2.default.SIDE, tileData.pos.y * _Tile2.default.SIDE, 0, "grass", 0, this._isoGroup);
-          tile.anchor.set(0.5, 0);
+          this._map[xx][yy].render(game, this._isoGroup);
         }
       }
     }
@@ -100633,6 +100631,21 @@ var Tile = function () {
       */
     this.pos = pos;
   }
+
+  /**
+    * Render the tile into the scene.
+    * @param {Phaser.Game} game - The Phaser Game Object.
+    * @param {Object} group - A Phaser group to store the tiles.
+    */
+
+
+  _createClass(Tile, [{
+    key: "render",
+    value: function render(game, group) {
+      var tile = game.add.isoSprite(this.pos.x * Tile.SIDE, this.pos.y * Tile.SIDE, 0, "grass", 0, group);
+      tile.anchor.set(0.5, 0);
+    }
+  }]);
 
   return Tile;
 }();
