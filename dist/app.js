@@ -100687,9 +100687,9 @@ var _Tile = require('./../Components/Tile.js');
 
 var _Tile2 = _interopRequireDefault(_Tile);
 
-var _Map2 = require('./../Components/Map.js');
+var _Map = require('./../Components/Map.js');
 
-var _Map3 = _interopRequireDefault(_Map2);
+var _Map2 = _interopRequireDefault(_Map);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -100708,13 +100708,12 @@ var Game = function Game(game) {
 
             if (setup_data == undefined) {
                 this._players = [];
-                this._map = _Map3.default.createGrassMap();
+                this._map = _Map2.default.createGrassMap();
             } else {
                 var Players = setup_data.Players;
-                var _Map = setup_data.Map;
 
                 this._players = Players;
-                this._map = _Map;
+                this._map = _Map2.default.createMapFromSetupData(setup_data.Map);
             }
 
             this._world_width = this._map.width * _Tile2.default.SIDE * 1.9;
@@ -101005,7 +101004,7 @@ var GameServer = function (_EventEmitter) {
   }, {
     key: "mockConnect",
     value: function mockConnect() {
-      this.emitEvent("setup_data", [undefined]);
+      this.emitEvent("setup_data");
     }
 
     /**

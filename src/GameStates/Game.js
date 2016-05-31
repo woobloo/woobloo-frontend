@@ -19,9 +19,9 @@ const Game = function (game) {
           this._players = [];
           this._map = Map.createGrassMap();
         } else {
-          const {Players, Map} = setup_data;
+          const {Players} = setup_data;
           this._players = Players;
-          this._map = Map;
+          this._map = Map.createMapFromSetupData(setup_data.Map);
         }
 
         this._world_width = this._map.width * Tile.SIDE * 1.9;

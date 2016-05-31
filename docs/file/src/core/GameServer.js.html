@@ -140,7 +140,7 @@ class GameServer extends EventEmitter{
     * @emits {&quot;setup_data&quot;} - Emits a setup_data event with no data.
     */
   mockConnect(){
-    this.emitEvent(&quot;setup_data&quot;, [undefined])
+    this.emitEvent(&quot;setup_data&quot;)
   }
 
   /**
