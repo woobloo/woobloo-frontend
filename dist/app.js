@@ -100425,17 +100425,17 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
-  * A class that represents a Map and includes helper functions
-  * and a render and update method.
-  */
+* A class that represents a Map and includes helper functions
+* and a render and update method.
+*/
 
 var Map = function () {
 
   /**
-    * Create a new map object using JSON data that represents a map.
-    * Usually in the same format as GameServer provided data.
-    * @param {Object} mapData - The Map data (from a server for instance)
-    */
+  * Create a new map object using JSON data that represents a map.
+  * Usually in the same format as GameServer provided data.
+  * @param {Object} mapData - The Map data (from a server for instance)
+  */
 
   function Map(mapData) {
     _classCallCheck(this, Map);
@@ -100443,24 +100443,24 @@ var Map = function () {
     this._map = mapData;
 
     /**
-      * The map's height in units (tiles)
-      * @type {Number}
-      */
+    * The map's height in units (tiles)
+    * @type {Number}
+    */
     this.height = mapData.length;
 
     /**
-      * The map's width in units (tiles)
-      * @type {Number}
-      */
+    * The map's width in units (tiles)
+    * @type {Number}
+    */
     this.width = mapData[0].length;
 
     this._tileset = ["grass", "rock"];
   }
 
   /**
-    * Preload all the resources used by a Map object
-    * @param {Phaser.Game} game - The Phaser game instance
-    */
+  * Preload all the resources used by a Map object
+  * @param {Phaser.Game} game - The Phaser game instance
+  */
 
 
   _createClass(Map, [{
@@ -100472,9 +100472,9 @@ var Map = function () {
     }
 
     /**
-      * Render the Map.
-      * @param {Phaser.Game} game - The Phaser game instance
-      */
+    * Render the Map.
+    * @param {Phaser.Game} game - The Phaser game instance
+    */
 
   }, {
     key: "render",
@@ -100490,10 +100490,10 @@ var Map = function () {
     }
 
     /**
-      * Update the Map
-      * @param {Phaser.Game} game - The Phaser game instance
-      * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position
-      */
+    * Update the Map
+    * @param {Phaser.Game} game - The Phaser game instance
+    * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position
+    */
 
   }, {
     key: "update",
@@ -100536,10 +100536,10 @@ var Map = function () {
     }
 
     /**
-      * Create a new test map object of only grass tiles.
-      *
-      * @return {Map} the grass map.
-      */
+    * Create a new test map object of only grass tiles.
+    *
+    * @return {Map} the grass map.
+    */
 
   }], [{
     key: "createGrassMap",
@@ -100553,6 +100553,30 @@ var Map = function () {
             type: "grass",
             pos: { x: i, y: j }
           });
+        }
+      }
+
+      return new Map(map);
+    }
+
+    /**
+    * Create a map from a GameServer setup_data Map object.
+    * @param {Array} map_data - The Map from a setup_data object.
+    */
+
+  }, {
+    key: "createMapFromSetupData",
+    value: function createMapFromSetupData(map_data) {
+      var map = [];
+
+      for (var i = 0; i < map_data.length; i++) {
+        map[i] = [];
+        for (var j = 0; j < map_data[i].length; j++) {
+          var tileData = map_data[i][j];
+          map[i][j] = new _Tile2.default(Object.assign({}, tileData, {
+            type: "grass",
+            pos: { x: tileData.X, y: tileData.Y }
+          }));
         }
       }
 

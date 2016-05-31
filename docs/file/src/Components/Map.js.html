@@ -46,126 +46,153 @@
 <pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import Tile from &apos;./Tile&apos;
 
 /**
-  * A class that represents a Map and includes helper functions
-  * and a render and update method.
-  */
+* A class that represents a Map and includes helper functions
+* and a render and update method.
+*/
 class Map {
 
+  /**
+  * Create a new map object using JSON data that represents a map.
+  * Usually in the same format as GameServer provided data.
+  * @param {Object} mapData - The Map data (from a server for instance)
+  */
+  constructor(mapData){
+    this._map = mapData;
+
     /**
-      * Create a new map object using JSON data that represents a map.
-      * Usually in the same format as GameServer provided data.
-      * @param {Object} mapData - The Map data (from a server for instance)
-      */
-    constructor(mapData){
-      this._map = mapData;
+    * The map&apos;s height in units (tiles)
+    * @type {Number}
+    */
+    this.height = mapData.length;
 
-      /**
-        * The map&apos;s height in units (tiles)
-        * @type {Number}
-        */
-      this.height = mapData.length;
+    /**
+    * The map&apos;s width in units (tiles)
+    * @type {Number}
+    */
+    this.width = mapData[0].length;
 
-      /**
-        * The map&apos;s width in units (tiles)
-        * @type {Number}
-        */
-      this.width = mapData[0].length;
+    this._tileset = [&quot;grass&quot;,&quot;rock&quot;]
+  }
 
-      this._tileset = [&quot;grass&quot;,&quot;rock&quot;]
+  /**
+  * Preload all the resources used by a Map object
+  * @param {Phaser.Game} game - The Phaser game instance
+  */
+  preload(game){
+    for(let i in this._tileset){
+      game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);
+    }
+  }
+
+  /**
+  * Render the Map.
+  * @param {Phaser.Game} game - The Phaser game instance
+  */
+  render(game){
+    // A group for the Game tiles.
+    this._isoGroup = game.add.group();
+
+    for (var xx = 0; xx &lt; this.height; xx ++) {
+      for (var yy = 0; yy &lt; this.width; yy ++) {
+        this._map[xx][yy].render(game, this._isoGroup);
+      }
+    }
+  }
+
+  /**
+  * Update the Map
+  * @param {Phaser.Game} game - The Phaser game instance
+  * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position
+  */
+  update(game, cursorPos){
+    // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
+    this._isoGroup.forEach(function (tile) {
+      var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
+      // If it does, do a little animation and tint change.
+      if (!tile.selected &amp;&amp; inBounds) {
+        tile.selected = true;
+        // tile.tint = 0x86bfda;
+        tile.tint = 0xa2a2a2;
+        // console.log(tile);
+
+        delete tile.infoPanel
+        tile.infoPanel = game.add.group();
+        tile.infoPanel.addChild(game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;))
+        tile.infoPanel.addChild(game.add.text(tile.x, tile.y, &quot;Tile Info&quot;))
+
+        tile.infoPanel.anchor = new Phaser.Point(0, 1);
+        tile.infoPanel.visible = false
+        setTimeout(() =&gt; {
+          // tile.infoPanel = game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;)
+          if(tile.selected)
+          tile.infoPanel.visible = true
+        }, 1000);
+        // game.add.image();
+
+        // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
+      }
+      // If not, revert back to how it was.
+      else if (tile.selected &amp;&amp; !inBounds) {
+        tile.selected = false;
+        tile.tint = 0xffffff;
+
+        if(tile.infoPanel)
+        tile.infoPanel.visible = false;
+
+        // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
+      }
+    });
+  }
+
+  /**
+  * Create a new test map object of only grass tiles.
+  *
+  * @return {Map} the grass map.
+  */
+  static createGrassMap(){
+    let map = []
+
+    for(let i = 0; i &lt; 50; i++){
+      map[i] = [];
+      for(let j = 0; j &lt; 50; j++){
+        map[i][j] = new Tile(
+          {
+            type: &quot;grass&quot;,
+            pos: { x: i,y: j }
+          }
+        );
+      }
     }
 
-    /**
-      * Preload all the resources used by a Map object
-      * @param {Phaser.Game} game - The Phaser game instance
-      */
-      preload(game){
-        for(let i in this._tileset){
-            game.load.image(this._tileset[i], `images/isometric/${this._tileset[i]}.png`);
-        }
-      }
+    return new Map(map)
+  }
 
-    /**
-      * Render the Map.
-      * @param {Phaser.Game} game - The Phaser game instance
-      */
-      render(game){
-        // A group for the Game tiles.
-        this._isoGroup = game.add.group();
+  /**
+  * Create a map from a GameServer setup_data Map object.
+  * @param {Array} map_data - The Map from a setup_data object.
+  */
+  static createMapFromSetupData(map_data){
+    let map = []
 
-        for (var xx = 0; xx &lt; this.height; xx ++) {
-            for (var yy = 0; yy &lt; this.width; yy ++) {
-                this._map[xx][yy].render(game, this._isoGroup);
+    for(let i = 0; i &lt; map_data.length; i++){
+      map[i] = [];
+      for(let j = 0; j &lt; map_data[i].length; j++){
+        const tileData = map_data[i][j]
+        map[i][j] = new Tile(
+          Object.assign(
+            {},
+            tileData,
+            {
+              type: &quot;grass&quot;,
+              pos: { x: tileData.X, y: tileData.Y }
             }
-        }
+          )
+        );
       }
-
-    /**
-      * Update the Map
-      * @param {Phaser.Game} game - The Phaser game instance
-      * @param {Phaser.Plugin.Isometric.Point3} cursorPos - The cursor position
-      */
-    update(game, cursorPos){
-      // Loop through all tiles and test to see if the 3D position from above intersects with the automatically generated IsoSprite tile bounds.
-      this._isoGroup.forEach(function (tile) {
-          var inBounds = tile.isoBounds.containsXY(cursorPos.x, cursorPos.y);
-          // If it does, do a little animation and tint change.
-          if (!tile.selected &amp;&amp; inBounds) {
-              tile.selected = true;
-              // tile.tint = 0x86bfda;
-              tile.tint = 0xa2a2a2;
-              // console.log(tile);
-
-              delete tile.infoPanel
-              tile.infoPanel = game.add.group();
-              tile.infoPanel.addChild(game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;))
-              tile.infoPanel.addChild(game.add.text(tile.x, tile.y, &quot;Tile Info&quot;))
-
-              tile.infoPanel.anchor = new Phaser.Point(0, 1);
-              tile.infoPanel.visible = false
-              setTimeout(() =&gt; {
-                // tile.infoPanel = game.add.image(tile.x, tile.y, &quot;tile_info_bg&quot;)
-                if(tile.selected)
-                  tile.infoPanel.visible = true
-              }, 1000);
-              // game.add.image();
-
-              // game.add.tween(tile).to({ isoZ: 4 }, 200, Phaser.Easing.Quadratic.InOut, true);
-          }
-          // If not, revert back to how it was.
-          else if (tile.selected &amp;&amp; !inBounds) {
-              tile.selected = false;
-              tile.tint = 0xffffff;
-
-              if(tile.infoPanel)
-                tile.infoPanel.visible = false;
-
-              // game.add.tween(tile).to({ isoZ: 0 }, 200, Phaser.Easing.Quadratic.InOut, true);
-          }
-      });
     }
 
-    /**
-      * Create a new test map object of only grass tiles.
-      *
-      * @return {Map} the grass map.
-      */
-    static createGrassMap(){
-      let map = [];
-
-      for(var i = 0; i &lt; 50; i++){
-        map[i] = [];
-          for(var j = 0; j &lt; 50; j++){
-            map[i][j] = new Tile(
-              {
-                type: &quot;grass&quot;,
-                pos: { x: i,y: j }
-              }
-            );
-          }
-      }
-
-      return new Map(map);
-    }
+    return new Map(map)
+  }
 }
 
 export default Map

@@ -414,6 +414,12 @@ window.esdocSearchIndex = [
     "method"
   ],
   [
+    "src/components/map.js~map.createmapfromsetupdata",
+    "class/src/Components/Map.js~Map.html#static-method-createMapFromSetupData",
+    "src/Components/Map.js~Map.createMapFromSetupData",
+    "method"
+  ],
+  [
     "src/components/tile.js",
     "file/src/Components/Tile.js.html",
     "src/Components/Tile.js",
